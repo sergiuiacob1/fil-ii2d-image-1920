@@ -1,0 +1,44 @@
+<html>
+  <body>
+    <img id="input" src="../data/tambour.png" width="240" height="320"/>
+    <script type="text/javascript">
+
+      //BLOC1
+      //.....
+      var imgElt = document.getElementById("input");
+
+
+      //BLOC2
+      //.....
+      var canvas = document.createElement("canvas");
+      canvas.width = imgElt.width; canvas.height = imgElt.height;
+
+      //BLOC3
+      //.....
+      var ctx2d = canvas.getContext("2d");
+      ctx2d.drawImage(imgElt, 0, 0, canvas.width, canvas.height);
+
+      //BLOC4
+      //.....
+      var imgData = ctx2d.getImageData(0, 0, canvas.width/2, canvas.height/2);
+      var pixels = imgData.data;
+
+      //BLOC5
+      //.....
+      for (var x = 0; x <imgData.width ; x++)
+        for (var y = 0; y<imgData.height; y++) {
+
+
+          var pos = (y * imgData.width + x)<<2;
+
+          var r = pixels[pos + 0], g = pixels[pos + 1], b = pixels[pos + 2], a = pixels[pos + 3];
+
+          var mean=(r+g+b)/3;
+
+          pixels[pos + 0] = mean;  pixels[pos + 1] = mean; pixels[pos + 2] = mean; pixels[pos + 3] = a;
+        }
+      ctx2d.putImageData(imgData,0,0);
+
+      </script>
+    </body>
+  </html>

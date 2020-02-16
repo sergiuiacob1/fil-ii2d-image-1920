@@ -1,0 +1,30 @@
+<html>
+  <body>
+    <canvas id="input" width="320" height="240"/><br/>
+    <script type="text/javascript">
+
+      //BLOC1
+      //.....
+      var canvas = document.getElementById("input");
+      var ctx2d = canvas.getContext("2d");
+      ctx2d.fillRect(90, 90, 20, 20);
+
+      //BLOC2
+      //.....
+      var imgData = ctx2d.getImageData(0, 0, canvas.width, canvas.height);
+      var pixels = imgData.data;
+
+      //BLOC3
+      //.....
+      var x = 100; var y = 100;
+      var pos_pixel_dans_vector = (y * imgData.width + x)<<2;
+      var r = pixels[pos_pixel_dans_vector + 0];
+      var g = pixels[pos_pixel_dans_vector + 1];
+      var b = pixels[pos_pixel_dans_vector + 2];
+      var a = pixels[pos_pixel_dans_vector + 3];
+
+      alert("Pixel at ("+x+", "+y+") : ("+r+", "+g+", "+b+", "+a+")");
+
+      </script>
+    </body>
+  </html>

@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <canvas id="input" width="320" height="240"/><br/>
+    <script type="text/javascript">
+
+      var canvas = document.getElementById("input");
+      var ctx2d = canvas.getContext("2d");
+      var imgData = ctx2d.getImageData(0,0,canvas.width,canvas.height);
+      var pixels = imgData.data;
+
+      //BLOC1
+      //...
+      var x = 100;
+      for (var y = 0; y < imgData.height; y++) {
+        var pos_pixel_dans_vector = (y * imgData.width + x)<<2;
+        pixels[pos_pixel_dans_vector + 0] = 255;
+        pixels[pos_pixel_dans_vector + 3] = (255 * y) / imgData.height;
+      }
+
+      //BLOC2
+      //.....
+      ctx2d.putImageData(imgData,0,0);
+      </script>
+    </body>
+  </html>
