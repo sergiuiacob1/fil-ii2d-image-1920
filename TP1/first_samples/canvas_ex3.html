@@ -1,0 +1,55 @@
+<html>
+
+<body>
+  <canvas id="input" width="320" height="240" /><br />
+  <script type="text/javascript">
+
+    var canvas = document.getElementById("input");
+    var ctx2d = canvas.getContext("2d");
+    var width = canvas.width, height = canvas.height;
+
+    // BLOC1
+    // nous sélectionnons une rectangle avec les dimensions (canvas.width / 2, canvas.height / 2)
+    // ce rectangle est centré sur le canvas
+    var imgData = ctx2d.getImageData(width / 4, height / 4, width / 2, height / 2);
+    var pixels = imgData.data;
+
+    // pour generer une couleur aleatoire, la meme pour chaque pixel
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * Math.floor(max));
+    }
+    let couleur = [getRandomInt(255), getRandomInt(255), getRandomInt(255)];
+
+    // BLOC2
+    // on va changer le remplissage pour le carré
+    // pour chaque pixel sur l'image, nous il donne une couleur et un transparence
+    // les pixels plus proches de le centre de l'image ont une couleur plus sombre
+    // pour un effet additionnel, chaque pixel avec les coordonnees (0, 0), (0, 10), (0, 20), ..., (10, 0), (10, 10), ...
+    // a une couleur "maximale" (r, g, b = 255, 255, 255), donc il est blanc
+    // ca nous donne une "perforation"
+    var maxDistance = Math.sqrt((imgData.width / 2) ** 2 + (imgData.height / 2) ** 2);
+    for (var x = 0; x < imgData.width; x++) {
+      for (var y = 0; y < imgData.height; y++) {
+        var pos_pixel_dans_vector = (y * imgData.width + x) << 2;
+        let centerDistance = Math.sqrt((x - imgData.width / 2) ** 2 + (y - imgData.height / 2) ** 2);
+        let ratio = centerDistance / maxDistance;
+        if (x % 10 == 0 && y % 10 == 0) {
+          pixels[pos_pixel_dans_vector + 0] = 255;
+          pixels[pos_pixel_dans_vector + 1] = 255;
+          pixels[pos_pixel_dans_vector + 2] = 255;
+        }
+        else {
+          pixels[pos_pixel_dans_vector + 0] = couleur[0] * ratio;
+          pixels[pos_pixel_dans_vector + 1] = couleur[1] * ratio;
+          pixels[pos_pixel_dans_vector + 2] = couleur[2] * ratio;
+        }
+        // visible
+        pixels[pos_pixel_dans_vector + 3] = 255;
+      }
+    }
+
+    ctx2d.putImageData(imgData, width / 4, height / 4);
+  </script>
+</body>
+
+</html>

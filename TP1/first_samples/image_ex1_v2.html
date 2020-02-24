@@ -1,0 +1,47 @@
+<html>
+
+<body>
+  <img id="input" src="../data/tambour.png" width="240" height="320" />
+  <script type="text/javascript">
+
+    // BLOC1
+    // on prendre l'element HTML avec l'id "input"; c'est notre image
+    var imgElt = document.getElementById("input");
+
+    imgElt.onload = function () {
+
+      // BLOC2
+      // pour corriger l'erreur de la première version
+      // nous devons de prendre l'image après qu'elle est prête
+      // donc, creer une canvas temporaire qui a les memes dimensions comme notre image
+      var canvas = document.createElement("canvas");
+      canvas.width = imgElt.width; canvas.height = imgElt.height;
+
+      // BLOC3
+      // sur notre canvas, peint l'image que nous avons pris
+      var ctx2d = canvas.getContext("2d");
+      ctx2d.drawImage(imgElt, 0, 0, canvas.width, canvas.height);
+
+
+      // BLOC4
+      // et après, prendre les pixels de l'image
+      // les pixels sont bons maintenant, parce-que l'image est chargée
+      var imgData = ctx2d.getImageData(0, 0, canvas.width, canvas.height);
+      var pixels = imgData.data;
+
+      // BLOC5
+      // afficher les values (red, green, blue, alpha) pour le pixel (50, 50)
+      var x = 50; var y = 50;
+      var pos_pixel_dans_vector = (y * imgData.width + x) << 2;
+      var r = pixels[pos_pixel_dans_vector + 0];
+      var g = pixels[pos_pixel_dans_vector + 1];
+      var b = pixels[pos_pixel_dans_vector + 2];
+      var a = pixels[pos_pixel_dans_vector + 3];
+
+      alert("Pixel at (" + x + ", " + y + ") : (" + r + ", " + g + ", " + b + ", " + a + ")");
+    }
+
+  </script>
+</body>
+
+</html>

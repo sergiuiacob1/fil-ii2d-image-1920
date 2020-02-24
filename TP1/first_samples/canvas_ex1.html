@@ -1,0 +1,39 @@
+<html>
+
+<body>
+  <canvas id="input" width="320" height="240" /><br />
+  <script type="text/javascript">
+
+    // BLOC1
+    // on retrouver le canvas qu'on utilise pour gagner et analyser les images
+    // avec le context de le canvas, peint une carre
+    // qui commence a (90, 90) et se finit a (90 + 20, 90 + 20)
+    // implicite, le "fillStyle" de le context est noir
+    var canvas = document.getElementById("input");
+    var ctx2d = canvas.getContext("2d");
+    ctx2d.fillRect(90, 90, 20, 20);
+
+    // BLOC2
+    // prendre l'image data de tout le canvas
+    // puis, prendre les pixels de cette image
+    var imgData = ctx2d.getImageData(0, 0, canvas.width, canvas.height);
+    var pixels = imgData.data;
+
+    // BLOC3
+    // pour retrouver les valeurs pour le pixel avec les coordonnées (100, 100)
+    // tout d'abord on necessite de trouver la position de cette pixel sur notre vector
+    // et c'est (i * no_colonnes + j) * 4, 4 = (r, g, b, a)
+    // on va utiliser l'opération "bit shift" parce-que c'est plus vite
+    var x = 100; var y = 100;
+    var pos_pixel_dans_vector = (y * imgData.width + x) << 2;
+    var r = pixels[pos_pixel_dans_vector + 0];
+    var g = pixels[pos_pixel_dans_vector + 1];
+    var b = pixels[pos_pixel_dans_vector + 2];
+    var a = pixels[pos_pixel_dans_vector + 3];
+
+    alert("Pixel at (" + x + ", " + y + ") : (" + r + ", " + g + ", " + b + ", " + a + ")");
+
+  </script>
+</body>
+
+</html>
