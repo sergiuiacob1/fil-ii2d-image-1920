@@ -1,0 +1,64 @@
+<html>
+
+<head>
+    <script lang="js" src="../tools.js"></script>
+    <script lang="js" src="../features/pixels.js"></script>
+    <script lang="js" src="../processing.js"></script>
+</head>
+
+<body>
+    <div style="display: flex; flex-direction: column; align-content: center;">
+        <div style="vertical-align:text-top; align-content: center;">
+            <img autoplay loop src="../data/tambour.png" id="input1" height="240" width="240"></img>
+            <span style="font-size:30px;">&#8594;</span>
+            <canvas id="canvas1" height="240" width="240"></canvas>
+        </div>
+        <div id="output1"></div>
+
+        <br></br>
+
+        <div>
+            <video src="../data/happy.mp4" id="input2" width="320" height="180" autoplay loop></video>
+            <span style="font-size:30px;">&#8594;</span>
+            <canvas id="canvas2" width="320" height="180"></canvas>
+        </div>
+        <div id="output2"></div>
+
+        <div>
+            <video src="../data/surprise.mp4" id="input3" width="320" height="180" autoplay loop></video>
+            <span style="font-size:30px;">&#8594;</span>
+            <canvas id="canvas3" width="320" height="180"></canvas>
+        </div>
+        <div id="output3"></div>
+
+    </div>
+
+
+    <script lang="javascript">
+        var opt_options = { output: document.getElementById("output1") }
+        var task1 = new GetMeanPixel(opt_options);
+        var process1 = new processing("input1", task1, "canvas1");
+
+        opt_options = { output: document.getElementById("output2") }
+        var task2 = new GetMeanPixel(opt_options);
+        var process2 = new processing("input2", task2, "canvas2");
+
+        var processes = [];
+        for (var i = 1; i <= 3; ++i) {
+            var opt_options = { output: document.getElementById(`output${i}`) }
+            var task = new GetMeanPixel(opt_options);
+            var process = new processing(`input${i}`, task, `canvas${i}`);
+            processes.push(process);
+        }
+
+        var loop = function () {
+            processes.forEach(process => {
+                process.do_process();
+            });
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+
+</html>

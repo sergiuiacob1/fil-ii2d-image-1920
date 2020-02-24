@@ -9,14 +9,14 @@
     var imgElt = document.getElementById("input");
 
     // BLOC2
-    // creer une canvas temporaire qui a les memes dimensions comme notre image
+    // creer un canvas temporaire qui a les memes dimensions comme notre image
     var canvas = document.createElement("canvas");
     canvas.width = imgElt.width; canvas.height = imgElt.height;
     // maintenant, le canvas n'est pas visible
     // document.body.append(canvas);
 
     // BLOC3
-    // sur notre canvas, peint l'image que nous avons pris
+    // sur notre canvas, peindre l'image que nous avons pris
     var ctx2d = canvas.getContext("2d");
     ctx2d.drawImage(imgElt, 0, 0, canvas.width, canvas.height);
 

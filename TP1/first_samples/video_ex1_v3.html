@@ -1,50 +1,58 @@
 <html>
-  <body>
-    <video id="input" src="../data/surprise.mp4" width="320" height="180" autoplay></video>
-    <canvas id="output" width="320" height="180"></canvas>
 
-    <script type="text/javascript">
+<body>
+  <video id="input" src="../data/surprise.mp4" width="320" height="180" autoplay></video>
+  <canvas id="output" width="320" height="180"></canvas>
 
-      //BLOC1
-      //.....
-      var videoElt = document.getElementById("input");
+  <script type="text/javascript">
 
-      //BLOC2
-      //.....
-      var canvas = document.getElementById("output");
-      var ctx2d = canvas.getContext("2d");
+    // BLOC1
+    // la vidéo à transformer
+    var videoElt = document.getElementById("input");
 
-      loop=function() {
+    // BLOC2
+    // le canvas qu'on utiliserons pour rendre nos modifications
+    var canvas = document.getElementById("output");
+    var ctx2d = canvas.getContext("2d");
 
-        ctx2d.drawImage(videoElt, 0, 0, canvas.width, canvas.height);
+    loop = function () {
 
-        //BLOC3
-        //.....
-        var imgData = ctx2d.getImageData(canvas.width/4, canvas.height/4, canvas.width/2, canvas.height/2);
-        var pixels = imgData.data;
+      ctx2d.drawImage(videoElt, 0, 0, canvas.width, canvas.height);
 
-        //BLOC4
-        //.....
-        for (var x = 0; x <imgData.width ; x++)
-          for (var y = 0; y<imgData.height; y++) {
+      // BLOC3
+      // cette fonction fait la même chose comme video_ex1_v2
+      // prendre les pixels de le centre de le cadre de la vidéo
+      var imgData = ctx2d.getImageData(canvas.width / 4, canvas.height / 4, canvas.width / 2, canvas.height / 2);
+      var pixels = imgData.data;
+
+      // BLOC4
+      // et transformer ces pixels en gris
+      // mais, après, il y a un appel de fonction récursive
+      // requestAnimationFrame(loop) fait une demande pour rappeler cette fonction, avant chaque repeindre
+      // donc tout que cette fonction fait sera refait
+      // pour chaque cadre de la vidéo 
+      for (var x = 0; x < imgData.width; x++)
+        for (var y = 0; y < imgData.height; y++) {
 
 
-            var pos = (y * imgData.width + x)<<2;
+          var pos = (y * imgData.width + x) << 2;
 
-            var r = pixels[pos + 0], g = pixels[pos + 1], b = pixels[pos + 2], a = pixels[pos + 3];
+          var r = pixels[pos + 0], g = pixels[pos + 1], b = pixels[pos + 2], a = pixels[pos + 3];
 
-            var mean=(r+g+b)/3;
+          var mean = (r + g + b) / 3;
 
-            pixels[pos + 0] = mean;  pixels[pos + 1] = mean; pixels[pos + 2] = mean; pixels[pos + 3] = a;
-          }
-        ctx2d.putImageData(imgData,canvas.width/4, canvas.height/4);
+          pixels[pos + 0] = mean; pixels[pos + 1] = mean; pixels[pos + 2] = mean; pixels[pos + 3] = a;
+        }
+      ctx2d.putImageData(imgData, canvas.width / 4, canvas.height / 4);
 
-        requestAnimationFrame(loop);
+      requestAnimationFrame(loop);
 
-      };
+    };
 
-      loop();
+    // l'appel initial de la fonction
+    loop();
 
-      </script>
-    </body>
-  </html>
+  </script>
+</body>
+
+</html>

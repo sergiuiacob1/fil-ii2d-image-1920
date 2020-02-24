@@ -14,12 +14,12 @@
       // ici est la même situations comme en image_ex1_v2
       // pour corriger la probleme, executer ce code après le chargement de l'image
 
-      // creer une canvas temporaire qui a les memes dimensions comme notre image
+      // creer un canvas temporaire qui a les memes dimensions comme notre image
       var canvas = document.createElement("canvas");
       canvas.width = imgElt.width; canvas.height = imgElt.height;
 
       // BLOC3
-      // sur notre canvas, peint l'image que nous avons pris
+      // sur notre canvas, peindre l'image que nous avons pris
       // aussi, rendre le canvas visible, pour voir notre modifications
       var ctx2d = canvas.getContext("2d");
       ctx2d.drawImage(imgElt, 0, 0, canvas.width, canvas.height);
@@ -34,6 +34,7 @@
       // transformer les valeurs pour les pixels comme ça:
       // r = (r + g + b) / 3, g = (r + g + b) / 3, b = (r + g + b) / 3
       // donc ca nous donne, normalement, une image grey
+      // et puis mettre tout l'image sur le canvas, en commençant par la position (0, 0)
       for (var x = 0; x < imgData.width; x++)
         for (var y = 0; y < imgData.height; y++) {
 

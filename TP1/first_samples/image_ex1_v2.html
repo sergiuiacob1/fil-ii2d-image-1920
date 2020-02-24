@@ -13,12 +13,12 @@
       // BLOC2
       // pour corriger l'erreur de la première version
       // nous devons de prendre l'image après qu'elle est prête
-      // donc, creer une canvas temporaire qui a les memes dimensions comme notre image
+      // donc, creer un temporaire qui a les memes dimensions comme notre image
       var canvas = document.createElement("canvas");
       canvas.width = imgElt.width; canvas.height = imgElt.height;
 
       // BLOC3
-      // sur notre canvas, peint l'image que nous avons pris
+      // sur notre canvas, peindre l'image que nous avons pris
       var ctx2d = canvas.getContext("2d");
       ctx2d.drawImage(imgElt, 0, 0, canvas.width, canvas.height);
 

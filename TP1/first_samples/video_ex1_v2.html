@@ -1,43 +1,51 @@
 <html>
-  <body>
-    <video id="input" src="../data/surprise.mp4" width="320" height="180" autoplay></video>
-    <canvas id="output" width="320" height="180"></canvas>
 
-    <script type="text/javascript">
+<body>
+  <video id="input" src="../data/surprise.mp4" width="320" height="180" autoplay></video>
+  <canvas id="output" width="320" height="180"></canvas>
 
-      //BLOC1
-      //.....
-      var videoElt = document.getElementById("input");
-      videoElt.addEventListener("playing",function() {
+  <script type="text/javascript">
 
-        //BLOC2
-        //.....
-        var canvas = document.getElementById("output");
-        var ctx2d = canvas.getContext("2d");
-        ctx2d.drawImage(videoElt, 0, 0, canvas.width, canvas.height);
+    // BLOC1
+    // on prendre l'element HTML avec l'id "input"; c'est notre video
+    var videoElt = document.getElementById("input");
+    videoElt.addEventListener("playing", function () {
 
-        //BLOC3
-        //.....
-        var imgData = ctx2d.getImageData(canvas.width/4, canvas.height/4, canvas.width/2, canvas.height/2);
-        var pixels = imgData.data;
+      // BLOC2
+      // pour corriger l'erreur de la première version
+      // on va maintenant prendre le cadre de video quand la video commencera
+      // donc on va peindre le cadre de la video sur notre canvas "output"
+      var canvas = document.getElementById("output");
+      var ctx2d = canvas.getContext("2d");
+      ctx2d.drawImage(videoElt, 0, 0, canvas.width, canvas.height);
 
-        //BLOC4
-        //.....
-        for (var x = 0; x <imgData.width ; x++)
-          for (var y = 0; y<imgData.height; y++) {
+      // BLOC3
+      // ici, nous sélections le centre de notre canvas
+      // c'est un rectangle avec les dimensions (longueur, largeur) = (canvas.width / 2, canvas.height / 2)
+      // puis, prendre les pixels pour cette image
+      var imgData = ctx2d.getImageData(canvas.width / 4, canvas.height / 4, canvas.width / 2, canvas.height / 2);
+      var pixels = imgData.data;
+
+      // BLOC4
+      // transformer l'image sur le canvas en gris
+      // et après mettre cette image modifiée sur le canvas
+      // l'image sera au centre
+      for (var x = 0; x < imgData.width; x++)
+        for (var y = 0; y < imgData.height; y++) {
 
 
-            var pos = (y * imgData.width + x)<<2;
+          var pos = (y * imgData.width + x) << 2;
 
-            var r = pixels[pos + 0], g = pixels[pos + 1], b = pixels[pos + 2], a = pixels[pos + 3];
+          var r = pixels[pos + 0], g = pixels[pos + 1], b = pixels[pos + 2], a = pixels[pos + 3];
 
-            var mean=(r+g+b)/3;
+          var mean = (r + g + b) / 3;
 
-            pixels[pos + 0] = mean;  pixels[pos + 1] = mean; pixels[pos + 2] = mean; pixels[pos + 3] = a;
-          }
-        ctx2d.putImageData(imgData,canvas.width/4, canvas.height/4);
-      });
+          pixels[pos + 0] = mean; pixels[pos + 1] = mean; pixels[pos + 2] = mean; pixels[pos + 3] = a;
+        }
+      ctx2d.putImageData(imgData, canvas.width / 4, canvas.height / 4);
+    });
 
-      </script>
-    </body>
-  </html>
+  </script>
+</body>
+
+</html>

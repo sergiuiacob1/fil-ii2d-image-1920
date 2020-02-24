@@ -1,42 +1,47 @@
 <html>
-  <body>
-    <video id="input" src="../data/surprise.mp4" width="320" height="180" autoplay></video>
-    <canvas id="output" width="320" height="180"></canvas>
 
-    <script type="text/javascript">
+<body>
+  <video id="input" src="../data/surprise.mp4" width="320" height="180" autoplay></video>
+  <canvas id="output" width="320" height="180"></canvas>
 
-      //BLOC1
-      //.....
-      var videoElt = document.getElementById("input");
+  <script type="text/javascript">
 
-      //BLOC2
-      //.....
-      var canvas = document.getElementById("output");
-      var ctx2d = canvas.getContext("2d");
-      ctx2d.drawImage(videoElt, 0, 0, canvas.width, canvas.height);
+    // BLOC1
+    // on prendre l'element HTML avec l'id "input"; c'est notre video
+    var videoElt = document.getElementById("input");
 
-      //BLOC3
-      //.....
-      var imgData = ctx2d.getImageData(0, 0, canvas.width/2, canvas.height/2);
-      var pixels = imgData.data;
+    // BLOC2
+    // prendre le canvas qui est défini au dessus
+    // et puis peindre l'image actuelle de la vidéo
+    // mais attentions, la vidéo n'est pas charge
+    var canvas = document.getElementById("output");
+    var ctx2d = canvas.getContext("2d");
+    ctx2d.drawImage(videoElt, 0, 0, canvas.width, canvas.height);
 
-      //BLOC4
-      //.....
-      for (var x = 0; x <imgData.width ; x++)
-        for (var y = 0; y<imgData.height; y++) {
+    // BLOC3
+    // prendre les pixels de cette image pour le coin supérieur gauche
+    var imgData = ctx2d.getImageData(0, 0, canvas.width / 2, canvas.height / 2);
+    var pixels = imgData.data;
 
-
-          var pos = (y * imgData.width + x)<<2;
-
-          var r = pixels[pos + 0], g = pixels[pos + 1], b = pixels[pos + 2], a = pixels[pos + 3];
-
-          var mean=(r+g+b)/3;
-
-          pixels[pos + 0] = mean;  pixels[pos + 1] = mean; pixels[pos + 2] = mean; pixels[pos + 3] = a;
-        }
-      ctx2d.putImageData(imgData,0,0);
+    // BLOC4
+    // rendre cette partie de l'image originale comme un image gris
+    // et puis mettre tout l'image sur le canvas, en commençant par la position (0, 0)
+    for (var x = 0; x < imgData.width; x++)
+      for (var y = 0; y < imgData.height; y++) {
 
 
-      </script>
-    </body>
-  </html>
+        var pos = (y * imgData.width + x) << 2;
+
+        var r = pixels[pos + 0], g = pixels[pos + 1], b = pixels[pos + 2], a = pixels[pos + 3];
+
+        var mean = (r + g + b) / 3;
+
+        pixels[pos + 0] = mean; pixels[pos + 1] = mean; pixels[pos + 2] = mean; pixels[pos + 3] = a;
+      }
+    ctx2d.putImageData(imgData, 0, 0);
+
+
+  </script>
+</body>
+
+</html>
