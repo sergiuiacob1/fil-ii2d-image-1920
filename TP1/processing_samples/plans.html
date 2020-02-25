@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <script lang="js" src="../tools.js"></script>
+    <script lang="js" src="../features/plans.js"></script>
+    <script lang="js" src="../processing.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+
+<body>
+    <div style="display: flex; flex-direction: column; align-content: center;">
+        <div>
+            <video src="./../data/turkey.mp4" id="input1" width="320" height="180" muted autoplay loop></video>
+            <span style="font-size:30px;">&#8594;</span>
+            <canvas id="canvas1" width="320" height="180"></canvas>
+        </div>
+        <div id="output1"></div>
+        <input type="range" id="threshold1" name="threshold1" min="0" max="100" step="0.5" value="10">
+        <label id="label-threshold1" for="threshold1">Seuil</label>
+        <div id="chart1" style="height: 300px; width: 100%;"></div>
+
+        <br><br><br><br><br><br><br><br><br>
+
+
+        <div>
+            <video src="../data/happy.mp4" id="input2" width="320" height="180" autoplay loop muted></video>
+            <span style="font-size:30px;">&#8594;</span>
+            <canvas id="canvas2" width="320" height="180"></canvas>
+        </div>
+        <div id="output2"></div>
+        <input type="range" id="threshold2" name="threshold2" min="0" max="100" step="0.5" value="10">
+        <label id="label-threshold2" for="threshold2">Seuil</label>
+        <div id="chart2" style="height: 300px; width: 100%;"></div>
+        <br><br><br><br><br><br><br><br><br>
+
+        <div>
+            <video src="../data/surprise.mp4" id="input3" width="320" height="180" autoplay loop muted></video>
+            <span style="font-size:30px;">&#8594;</span>
+            <canvas id="canvas3" width="320" height="180"></canvas>
+        </div>
+        <div id="output3"></div>
+        <input type="range" id="threshold3" name="threshold3" min="0" max="100" step="0.5" value="12.5">
+        <label id="label-threshold3" for="threshold3">Seuil</label>
+        <div id="chart3" style="height: 300px; width: 100%;"></div>
+        <br><br><br><br><br><br><br><br><br>
+    </div>
+
+
+    <script lang="javascript">
+        var processes = [];
+        for (var i = 1; i <= 3; ++i) {
+            var opt_options = { output: document.getElementById(`output${i}`), id: i }
+            var task = new DetectionPlans(opt_options);
+            var process = new processing(`input${i}`, task, `canvas${i}`);
+            processes.push(process);
+        }
+
+        var loop = function () {
+            processes.forEach(process => {
+                process.do_process();
+            });
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+
+</html>

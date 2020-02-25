@@ -60,37 +60,31 @@ GetMeanPixel = function (opt_options) {
 }
 
 GetMeanPixel.prototype.process = function (imageData) {
-  var rMean = 0;
-  var gMean = 0;
-  var bMean = 0;
-  var aMean = 0;
+  var means = [0, 0, 0, 0];
+  var pos = 0;
   for (var x = 0; x < imageData.width; ++x)
     for (var y = 0; y < imageData.height; ++y) {
-      var pos = (y * imageData.width + x) << 2;
-      rMean += imageData.data[pos];
-      gMean += imageData.data[pos + 1];
-      bMean += imageData.data[pos + 2];
-      aMean += imageData.data[pos + 3];
+      for (var i = 0; i < 4; ++i)
+        means[i] += imageData.data[pos + i];
+      pos += 4;
     }
 
-  rMean /= (imageData.width * imageData.height);
-  gMean /= (imageData.width * imageData.height);
-  bMean /= (imageData.width * imageData.height);
-  aMean /= (imageData.width * imageData.height);
-  rMean = Math.round(rMean), gMean = Math.round(gMean), bMean = Math.round(bMean), aMean = Math.round(aMean);
+  for (var i = 0; i < 4; ++i) {
+    means[i] /= (imageData.width * imageData.height);
+    means[i] = Math.round(means[i]);
+  }
 
+  pos = 0;
   for (var x = 0; x < imageData.width; ++x)
     for (var y = 0; y < imageData.height; ++y) {
-      var pos = (y * imageData.width + x) << 2;
-      imageData.data[pos] = rMean;
-      imageData.data[pos + 1] = gMean;
-      imageData.data[pos + 2] = bMean;
-      imageData.data[pos + 3] = aMean;
+      for (var i = 0; i < 4; ++i)
+        imageData.data[pos + i] = means[i];
+      pos += 4;
     }
 
   this.output.innerHTML = "les valeurs moyennes (r, g, b, a) arrondies :<br>";
-  this.output.innerHTML += "<font color='red'>" + rMean + "</font> | ";
-  this.output.innerHTML += "<font color='green'>" + gMean + "</font> | ";
-  this.output.innerHTML += "<font color='blue'>" + bMean + "</font> | ";
-  this.output.innerHTML += "<font style='color: rgba(0, 0, 0, 0.5);'>" + aMean + "</font> | ";
+  this.output.innerHTML += "<font color='red'>" + means[0] + "</font> | ";
+  this.output.innerHTML += "<font color='green'>" + means[1] + "</font> | ";
+  this.output.innerHTML += "<font color='blue'>" + means[2] + "</font> | ";
+  this.output.innerHTML += "<font style='color: rgba(0, 0, 0, 0.5);'>" + means[3] + "</font> | ";
 }

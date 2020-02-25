@@ -24,6 +24,9 @@
         </div>
         <div id="output2"></div>
 
+        <br></br>
+
+
         <div>
             <video src="../data/surprise.mp4" id="input3" width="320" height="180" autoplay loop></video>
             <span style="font-size:30px;">&#8594;</span>
@@ -31,18 +34,11 @@
         </div>
         <div id="output3"></div>
 
+        <br></br>
     </div>
 
 
     <script lang="javascript">
-        var opt_options = { output: document.getElementById("output1") }
-        var task1 = new GetMeanPixel(opt_options);
-        var process1 = new processing("input1", task1, "canvas1");
-
-        opt_options = { output: document.getElementById("output2") }
-        var task2 = new GetMeanPixel(opt_options);
-        var process2 = new processing("input2", task2, "canvas2");
-
         var processes = [];
         for (var i = 1; i <= 3; ++i) {
             var opt_options = { output: document.getElementById(`output${i}`) }

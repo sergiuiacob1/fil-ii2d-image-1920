@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <script lang="js" src="../tools.js"></script>
+    <script lang="js" src="../filters/gray_filters.js"></script>
+    <script lang="js" src="../processing.js"></script>
+</head>
+
+<body>
+    <img id="input1" src="../data/rgb.png" width="240" height="320" />
+    <span style="font-size:30px;">&#8594;</span>
+    <canvas id="output1" width="240" height="320"></canvas>
+    <br>
+    <!-- max distance = sqrt (240**2 + 320**2) -->
+    <input type="range" id="threshold1" name="threshold1" min="1" max="400" step="1" value="100">
+    <label id="label-threshold1" for="threshold1"></label>
+
+    <br><br><br>
+
+    <img id="input2" src="../data/tambour.png" width="240" height="320" />
+    <span style="font-size:30px;">&#8594;</span>
+    <canvas id="output2" width="240" height="320"></canvas>
+    <br>
+    <!-- max distance = sqrt (240**2 + 320**2) -->
+    <input type="range" id="threshold2" name="threshold2" min="1" max="400" step="1" value="50">
+    <label id="label-threshold2" for="threshold2"></label>
+
+    <script lang="javascript">
+        var _task1 = new ToGrayDistanceTask({ x: 120, y: 200, dx: 0, dy: 0, id: 1 })
+        var _proc1 = new processing("input1", _task1, "output1");
+        var _task2 = new ToGrayDistanceTask({ x: 55, y: 210, dx: 3, dy: 1.5, id: 2 })
+        var _proc2 = new processing("input2", _task2, "output2");
+        var loop = function () {
+            _proc1.do_process();
+            _proc2.do_process();
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+
+</html>

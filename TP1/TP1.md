@@ -57,5 +57,37 @@ La tâche `GetRandomRGBAPixel` change la position du pixel sondé avec la positi
 ### Q12
 
 La fonction demandée a été implémentée dans [pixels.js](./features/pixels.js) et utilisée ici: [gray_values.html](./processing_samples/gray_values.html).
-Pour chaque element, les valeurs moyennes sont affichées avec leur representation (une image ou tous les pixels ont les valeurs RGB moyennes).
+Pour chaque element, les valeurs moyennes sont affichées avec leur representation (une image où tous les pixels ont les valeurs RGB moyennes).
+
+### Q13
+
+Dans [plans.html](./processing_samples/plans.html) il y a une démo pour detecter le changement de plans, pour 3 vidéos. Pour chacun, nous pouvons visualiser la distance entre le courant cadre de la vidéo et le dernier. Sur la base d'un seuil (facilement configurable), on va calculer le changement de plans en utilisant le distance Euclidienne entre les pixels moyennes: [plans.js](./features/plans.js).
+
+---
+
+## Transformation d'images
+
+---
+
+### Q14
+
+On va utiliser le `ToGrayTask` pour un premier transformation: rendre l'image en gris. Après, nous utiliserons le tâche `BlackAndWhiteTask` implémentée dans [gray_filters.js](./filters/gray_filters.js) accompagné d'un seuil pour transformer l'image en noir et blanc. Démo: [image_gray_0.html](./processing_samples/image_gray_0.html)
+
+### Q15
+
+Dans [image_gray_1.html](./processing_samples/image_gray_1.html), les pixels où le valeur `R < G` ou `R < B` sont transformés en gris avec le tâche `ToGrayCustomTask` : [gray_filters.js](./filters/gray_filters.js). On peut voir que les pixels que ont une valeur rouge forte reste le même.
+
+### Q16
+
+Si chaque canaux à un propre poid, on peut voir que, par exemple, si on donne un poid maximale pour `R` et nulle pour les autres, les parties de l'image qui sont plus rouge sont plus blanc sur l'image gris. Implémentation de `ToGrayWeightedTask` : [gray_filters.js](./filters/gray_filters.js), démo: [image_gray_2.html](./processing_samples/image_gray_2.html).
+
+### Q17
+
+Dans [image_gray_3.html](./processing_samples/image_gray_3.html), l'image a les canaux `R` and `B` inversés en utilisant le tâche `ReverseRAndBTask` : [gray_filters.js](./filters/gray_filters.js).
+
+### Q18, Q19
+
+La tâche `ToGrayDistanceTask` implémentée dans [gray_filters.js](./filters/gray_filters.js) permet de transformer en gris un portion de l'image proche d'un certain pixel. Démo: [image_gray_4.html](./processing_samples/image_gray_4.html).
+
+
 

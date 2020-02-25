@@ -1,0 +1,25 @@
+<html>
+
+<head>
+  <script lang="js" src="../tools.js"></script>
+  <script lang="js" src="../filters/gray_filters.js"></script>
+  <script lang="js" src="../processing.js"></script>
+</head>
+
+<body>
+  <img id="input" src="../data/tambour.png" width="240" height="320" />
+  <span style="font-size:30px;">&#8594;</span>
+  <canvas id="output" width="240" height="320"></canvas>
+
+  <script lang="javascript">
+    var _task = new ToGrayCustomTask({})
+    var _proc = new processing("input", _task, "output");
+    var loop = function () {
+      _proc.do_process();
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+
+</html>
