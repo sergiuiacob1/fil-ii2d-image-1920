@@ -204,24 +204,18 @@ ToGrayZoomTask.prototype.process = function (imageData) {
       }
       else {
         // these pixels are inside the circle, remember them
+        var aux = []
         for (var i = 0; i < 4; ++i)
-          toZoom.push(imageData.data[pos + i]);
+          aux.push(imageData.data[pos + i]);
+        toZoom.push(aux);
       }
       pos += 4;
     }
 
   // now for the zooming part
   // zoom only the "middle" pixels
-  var middleIndex = toZoom.length / 2;
-  toZoom = toZoom.slice(middleIndex - middleIndex / 2, middleIndex + middleIndex / 2);
-  var zoomed = [];
-  for (var i = 0; i < toZoom.length; i += 4) {
-    // take this pixel, insert it twice
-    for (var j = 0; j < 4; ++j)
-      zoomed.push(toZoom[i + j]);
-    for (var j = 0; j < 4; ++j)
-      zoomed.push(toZoom[i + j]);
-  }
+  var middleIndex = (toZoom.length + 1) / 2;
+  
 
   // put the zoomed part in the image data
   var i = 0;
@@ -230,12 +224,13 @@ ToGrayZoomTask.prototype.process = function (imageData) {
     for (var x = 0; x < imageData.width; ++x) {
       // distance from the centre
       dist = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
-      if (dist <= ray) {
+      if (dist <= ray)
         for (var j = 0; j < 4; ++j)
-          imageData.data[pos + j] = zoomed[i++];
-      }
+          imageData.data[pos + j] = zoomed[i][j];
+
       pos += 4;
     }
+
 
   // move the circle
   // but make sure we don't go out of the image
