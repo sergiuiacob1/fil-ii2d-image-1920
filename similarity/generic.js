@@ -1,4 +1,4 @@
-var generic_similarity={}
+var generic_similarity = {}
 
 /*
   Generic task that allows similarity measures between a source image and a collection of images contained in a Dataset object.
@@ -14,67 +14,66 @@ var generic_similarity={}
 
 */
 
-generic_similarity.SimilarityTask=function(dataset, descriptor_func,similarity_metric_func, opt_options)
-{
+generic_similarity.SimilarityTask = function (dataset, descriptor_func, similarity_metric_func, opt_options) {
 
-  this.dataset=dataset;
+  this.dataset = dataset;
 
-  this.descriptor_func=descriptor_func;
-  this.desc_opt_options=opt_options.desc_opt_options;
+  this.descriptor_func = descriptor_func;
+  this.desc_opt_options = opt_options.desc_opt_options;
 
   console.log("constructing generic similarity task using the bellow descriptor and options (2 lines)");
   console.log(descriptor_func);
   console.log(opt_options.desc_opt_options);
 
-  //BLOC1
-  //....
-  this.dataset_descriptors=[];
+  // BLOC1
+  // pour chaque image dans notre dataset, on va calculer un descripteur pour cette image
+  // le descriptor a calculer est donne comme un parametre: descriptor_func
+  // on va donner aussi, pour la fonction qui on va calculer le descripteur, des parametres additionel (this.desc_opt_options) pour savoir comment on va calculer le descripteur
+  this.dataset_descriptors = [];
   for (var idx in this.dataset.imageDatas) {
-    this.dataset_descriptors[idx]=
-      this.descriptor_func(this.dataset.imageDatas[idx],this.desc_opt_options);
-    console.log("descriptor for image "+idx+" in dataset : "+ this.dataset_descriptors[idx]);
+    this.dataset_descriptors[idx] =
+      this.descriptor_func(this.dataset.imageDatas[idx], this.desc_opt_options);
+    console.log("descriptor for image " + idx + " in dataset : " + this.dataset_descriptors[idx]);
   }
 
-  this.similarity_metric_func=similarity_metric_func;
-  this.similarity_metric_opt_options=opt_options.similarity_metric_opt_options;
+  this.similarity_metric_func = similarity_metric_func;
+  this.similarity_metric_opt_options = opt_options.similarity_metric_opt_options;
 }
 
 
-generic_similarity.SimilarityTask.prototype.process_descriptor=function(in_descriptor)
-{
+generic_similarity.SimilarityTask.prototype.process_descriptor = function (in_descriptor) {
 
   //BLOC2
   //.....
-  var sim=[],order=[];
+  var sim = [], order = [];
   for (var idx in this.dataset_descriptors) {
-    sim[idx]=this.similarity_metric_func(
-      in_descriptor,this.dataset_descriptors[idx],this.metric_opt_options);
-    order[idx]=idx;
+    sim[idx] = this.similarity_metric_func(
+      in_descriptor, this.dataset_descriptors[idx], this.metric_opt_options);
+    order[idx] = idx;
   }
 
   //BLOC3
   //....
   for (var idx1 in order)
     for (var idx2 in order)
-      if (sim[order[idx1]]<sim[order[idx2]])
-        { aux=order[idx1]; order[idx1]=order[idx2]; order[idx2]=aux; }
+      if (sim[order[idx1]] < sim[order[idx2]]) { aux = order[idx1]; order[idx1] = order[idx2]; order[idx2] = aux; }
 
   //BLOC4
   //.....
-  var res=[];
-  for (var idx in order) res[idx]={idx:order[idx],sim:sim[order[idx]]}
+  var res = [];
+  for (var idx in order) res[idx] = { idx: order[idx], sim: sim[order[idx]] }
   return res;
 }
 
-generic_similarity.SimilarityTask.prototype.process=function(in_imageData){
+generic_similarity.SimilarityTask.prototype.process = function (in_imageData) {
   //BLOC5
   //...
-  var in_descriptor=this.descriptor_func(in_imageData,this.desc_opt_options);
+  var in_descriptor = this.descriptor_func(in_imageData, this.desc_opt_options);
   return this.process_descriptor(in_descriptor);
 }
 
 
-generic_similarity.SimilarityTask.prototype.get_dataset_descriptor=function(idx) {
+generic_similarity.SimilarityTask.prototype.get_dataset_descriptor = function (idx) {
   //BLOC6
   //...
   return this.dataset_descriptors[idx];
