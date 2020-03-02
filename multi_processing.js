@@ -1,3 +1,8 @@
+/*
+
+Similar to processing.js but allows the processing of multiple images at the same time.
+
+*/
 var multi_processing = function (elementIds, task_multi, outputCanvasId) {
   this.elementIds = elementIds;
   this.element = []; this.width = []; this.height = [];
