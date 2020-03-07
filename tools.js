@@ -59,6 +59,21 @@ Tools.copy_imageData_into_imageData=function(src_imageData,dest_imageData,x0,y0)
     }
 }
 
+Tools.copy_partial_imageData_into_imageData=
+function(src_imageData,x0,y0,dx,dy,dest_imageData,x1,y1) {
+
+  for (var src_y=y0; src_y<Math.min(y0+dy,src_imageData.height); src_y++)
+    for (var src_x=x0; src_x < Math.min(x0+dx,src_imageData.width); src_x++) {
+      var w_src=(src_y*src_imageData.width+src_x)<<2;
+      w_out=((y1+(src_y-y0))*dest_imageData.width+(x1+(src_x-x0)))<<2;
+      dest_imageData.data[w_out]=src_imageData.data[w_src];
+      dest_imageData.data[w_out+1]=src_imageData.data[w_src+1];
+      dest_imageData.data[w_out+2]=src_imageData.data[w_src+2];
+      dest_imageData.data[w_out+3]=src_imageData.data[w_src+3];
+
+    }
+}
+
 Tools.get_region_from_imageData=function(src_imageData,x0,y0,dx,dy) {
   var reg_imageData=src_imageData.ctxt.getImageData(
       src_imageData.orig_x+x0,src_imageData.orig_y+y0,
@@ -69,4 +84,36 @@ Tools.get_region_from_imageData=function(src_imageData,x0,y0,dx,dy) {
   reg_imageData.orig_id = src_imageData.orig_id;
 
   return reg_imageData;
+}
+
+Tools.strokeBBox_on_imageData=function(imgData,bbox,col) {
+  Tools.strokeRect_on_imageData(imgData,bbox.x0,bbox.y0,bbox.dx,bbox.dy,col);
+}
+
+Tools.strokeRect_on_imageData=function(imgData,x0,y0,width,height,col) {
+  var w;
+
+  for (var x=x0;x<x0+width;x++) {
+    w=((y0)*imgData.width+x)<<2;
+    imgData.data[w]=col[0];imgData.data[w+1]=col[1];imgData.data[w+2]=col[2];
+    imgData.data[w+3]=255;
+    w=((y0+height)*imgData.width+x)<<2;
+    imgData.data[w]=col[0];imgData.data[w+1]=col[1];imgData.data[w+2]=col[2];
+    imgData.data[w+3]=255;
+  }
+  for (var y=y0;y<y0+height;y++) {
+    w=(y*imgData.width+x0)<<2;
+    imgData.data[w]=col[0];imgData.data[w+1]=col[1];imgData.data[w+2]=col[2];
+    imgData.data[w+3]=255;
+    w=(y*imgData.width+x0+width)<<2;
+    imgData.data[w]=col[0];imgData.data[w+1]=col[1];imgData.data[w+2]=col[2];
+    imgData.data[w+3]=255;
+  }
+}
+
+Tools.copySize=function(elt_id_1,elt_id_2) {
+  var elt1=document.getElementById(elt_id_1);
+  var elt2=document.getElementById(elt_id_2);
+  elt2.width=elt1.width;
+  elt2.height=elt1.height;
 }

@@ -1,0 +1,58 @@
+<html>
+<head>
+<script lang="js" src="../tools.js"></script>
+<script lang="js" src="../processing2.js"></script>
+<script lang="js" src="../movement/difference.js"></script>
+<script lang="js" src="../effects/focus.js"></script>
+</head>
+<body>
+
+  <img id="input" src="../data/16_05.jpg" width="320" height="180"></img>
+  <canvas id="output1" width="320" height="180"></canvas><br/>
+  <canvas id="output2" width="320" height="180"></canvas>
+  <canvas id="output3" width="320" height="180"></canvas>
+
+
+  <script lang="javascript">
+    //BLOC1
+    //...
+    var _focus_options={focus_x:50,focus_y:50,focus_radius:50,width:320,height:180,random:true,
+    focus_dx:20,focus_dy:20};
+    var _task1=new focus.MovingFocus(_focus_options);
+    var _proc1=new processing2("input",_task1,"output1");
+
+    //BLOC2
+    //...
+    var _opt_options={width:320,height:180,threshold:50};
+    var _task2=new diff.DifferenceImageRGB(_opt_options);
+    var _proc2=new processing2("output1",_task2,"output2");
+
+    //BLOC3
+    //...
+    var _opt_options={width:320,height:180,threshold:1};
+    var _task3=new diff.NormalizedDifferenceImageRGB(_opt_options);
+    var _proc3=new processing2("output1",_task3,"output3");
+
+    //BLOC4
+    //...
+    var img_elt=document.getElementById("input");
+    img_elt.addEventListener("loadeddata",function(){
+      _task2.set_first_frame_from_eltId("input");
+    });
+
+    //BLOC5
+    //...
+    var loop=function() {
+      _proc1.do_process();
+      _task1.updateFocus();
+
+      _proc2.do_process();
+      _proc3.do_process();
+
+      setTimeout(loop,200);
+    }
+    loop();
+
+  </script>
+</body>
+</html>

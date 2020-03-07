@@ -1,0 +1,43 @@
+<html>
+<head>
+<script lang="js" src="../tools.js"></script>
+<script lang="js" src="../processing2.js"></script>
+<script lang="js" src="../movement/difference.js"></script>
+<script lang="js" src="../effects/focus.js"></script>
+<script lang="js" src="../metrics/generic.js"></script>
+<script lang="js" src="../metrics/pixels.js"></script>
+<script lang="js" src="../segmentation/blobs.js"></script>
+</head>
+<body>
+
+  <img id="input" src="../data/rgb.png" width="50" height="50"></img>
+  <canvas id="output" width="50" height="50"></canvas>
+
+  <br></br>
+
+  <button onclick="javascript:process()">Blobs</button>
+
+
+  <script lang="javascript">
+    var process=function() {
+      var _opt_options={metric:pixel_metrics.gray_rgb_edist,threshold:10};
+      var _task1=new blobs.Pixel8ConnectivityBlobs(_opt_options);
+      var _proc1=new processing2("input",_task1,"output");
+      _proc1.do_process();
+      var components_bbox=_proc1.get_result();
+
+
+      var cvs_ctxt=document.getElementById("output").getContext("2d");
+      console.log(components_bbox);
+      for (idx in components_bbox) {
+        cvs_ctxt.strokeStyle=[components_bbox[idx].mean[0],
+        components_bbox[idx].mean[1],components_bbox[idx].mean[2],255];
+        cvs_ctxt.strokeRect(
+            components_bbox[idx].x, components_bbox[idx].y,
+            components_bbox[idx].width, components_bbox[idx].height,
+            );
+      }
+    }
+  </script>
+</body>
+</html>

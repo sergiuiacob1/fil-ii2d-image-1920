@@ -1,0 +1,61 @@
+<html>
+<head>
+<script lang="js" src="../tools.js"></script>
+<script lang="js" src="../processing2.js"></script>
+<script lang="js" src="../movement/difference.js"></script>
+<script lang="js" src="../metrics/generic.js"></script>
+<script lang="js" src="../metrics/pixels.js"></script>
+<script lang="js" src="../filters/morpho.js"></script>
+<script lang="js" src="../effects/generic.js"></script>
+<script lang="js" src="../effects/morpho.js"></script>
+</head>
+<body>
+
+  <img id="input" src="../data/red_circle.gif" width="320" height="200"></img>
+  <canvas id="output1"></canvas>
+  <canvas id="output2"></canvas>
+  <br></br>
+  <img id="input2" src="../data/16_03.jpg" width="320" height="200"></img>
+  <canvas id="output3"></canvas>
+  <canvas id="output4"></canvas>
+  <br></br>
+  <button onclick="javascript:process()">Do</button>
+
+  <script lang="javascript">
+  var process=function() {
+    Tools.copySize("input","output1");
+    Tools.copySize("input","output2");
+
+    //BLOC1
+    //...
+    var _opt_options={window_width:10,window_height:10};
+    var _task1=new morpho_effects.DilatationWindow(_opt_options);
+    var _proc1=new processing2("input",_task1,"output1");
+    _proc1.do_process();
+
+    //BLOC2
+    //...
+    var _task2=new morpho_effects.ErosionWindow(_opt_options);
+    var _proc2=new processing2("output1",_task2,"output2");
+    _proc2.do_process();
+
+    Tools.copySize("input2","output3");
+    Tools.copySize("input2","output4");
+
+    //BLOC3
+    //...
+    var _opt_options={window_width:10,window_height:10};
+    var _task3=new morpho_effects.DilatationWindow(_opt_options);
+    var _proc3=new processing2("input2",_task3,"output3");
+    _proc3.do_process();
+
+    //BLOC4
+    //...
+    var _task4=new morpho_effects.ErosionWindow(_opt_options);
+    var _proc4=new processing2("output3",_task4,"output4");
+    _proc4.do_process();
+  }
+
+  </script>
+</body>
+</html>

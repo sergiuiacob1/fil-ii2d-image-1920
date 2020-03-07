@@ -1,0 +1,31 @@
+<html>
+<head>
+<script lang="js" src="../tools.js"></script>
+<script lang="js" src="../processing2.js"></script>
+<script lang="js" src="../movement/difference.js"></script>
+
+</head>
+<body>
+  <video autoplay loop src="../data/surprise.mp4" id="input" width="320" height="180"></video>
+  <canvas id="output1" width="320" height="180"></canvas>
+
+  <script lang="javascript">
+    var _opt_options={width:320,height:180};
+
+    var _task1=new diff.DifferenceImageRGB(_opt_options);
+    var video_elt=document.getElementById("input");
+    video_elt.addEventListener("loadeddata",function(){
+      _task1.set_first_frame_from_eltId("input");
+    });
+
+    var _proc1=new processing2("input",_task1,"output1");
+
+    var loop=function() {
+      _proc1.do_process();
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+  </script>
+</body>
+</html>
