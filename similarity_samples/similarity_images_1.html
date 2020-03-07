@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <script lang="js" src="../tools.js"></script>
   <script lang="js" src="../features/generic.js"></script>
@@ -9,6 +10,7 @@
   <script lang="js" src="../similarity/generic.js"></script>
   <script lang="js" src="../similarity/pixels.js"></script>
 </head>
+
 <body>
   Dataset <br>
   <img border="1" width="32" height="32" id='input1' src='../data/I1.png'></img>
@@ -24,9 +26,12 @@
   Types de similarité <br>
   <ul>
     <li>0 : MeanRGBSimilarityTask
-    </li><li>1 : GridMeanRGBSimilarityTask (1,2)
-    </li><li>2 : GridMeanRGBSimilarityTask (2,1)
-    </li><li>3 : GridMeanRGBSimilarityTask (2,2)
+    </li>
+    <li>1 : GridMeanRGBSimilarityTask (1,2)
+    </li>
+    <li>2 : GridMeanRGBSimilarityTask (2,1)
+    </li>
+    <li>3 : GridMeanRGBSimilarityTask (2,2)
     </li>
   </ul>
   <br>
@@ -35,65 +40,71 @@
   <button onclick="javascript:similarity()">Similarité</button>
   <br></br>
   <script lang="javascript">
-    similarity=function() {
-      var task=[],inputs=[];
-      for (var i=1;i<9;i++) inputs[i]="input"+i;
-      _dataset=new datasets.ImageDataset(inputs);
+    similarity = function () {
+      var task = [], inputs = [];
+      for (var i = 1; i < 9; i++) inputs[i] = "input" + i;
+      _dataset = new datasets.ImageDataset(inputs);
 
-      //BLOC1
-      //...
-      _task=new pixels_similarity.MeanRGBSimilarityTask(_dataset,{
-        desc_opt_options:{},
-        metric_opt_options:{}
+      // BLOC1
+      // on va faire un comparison entre les methods de calculer la similarité
+      // la première méthode: MeanRGBSimilarityTask, similitude entre les pixels moyens des images
+      _task = new pixels_similarity.MeanRGBSimilarityTask(_dataset, {
+        desc_opt_options: {},
+        metric_opt_options: {}
       });
 
-      //BLOC2
-      //...
-      _task_grid_1x2=new pixels_similarity.GridMeanRGBSimilarityTask(_dataset,{
-        dataset_image_ids:inputs,
-        desc_opt_options:{nb_columns:1,nb_lines:2},
-        metric_opt_options:{}
+      // BLOC2
+      // la deuxième méthode: GridMeanRGBSimilarityTask
+      // avec un grid 2 lines x 1 colonnes
+      _task_grid_1x2 = new pixels_similarity.GridMeanRGBSimilarityTask(_dataset, {
+        dataset_image_ids: inputs,
+        desc_opt_options: { nb_columns: 1, nb_lines: 2 },
+        metric_opt_options: {}
       });
 
-      //BLOC3
-      //...
-      _task_grid_2x1=new pixels_similarity.GridMeanRGBSimilarityTask(_dataset,{
-        dataset_image_ids:inputs,
-        desc_opt_options:{nb_columns:2,nb_lines:1},
-        metric_opt_options:{}
+      // BLOC3
+      // la troisième méthode: GridMeanRGBSimilarityTask, avec un grid 1 lines x 2 colonnes
+      _task_grid_2x1 = new pixels_similarity.GridMeanRGBSimilarityTask(_dataset, {
+        dataset_image_ids: inputs,
+        desc_opt_options: { nb_columns: 2, nb_lines: 1 },
+        metric_opt_options: {}
       });
 
-      //BLOC4
-      //...
-      _task_grid_2x2=new pixels_similarity.GridMeanRGBSimilarityTask(_dataset,{
-        dataset_image_ids:inputs,
-        desc_opt_options:{nb_columns:2,nb_lines:2},
-        metric_opt_options:{}
+      // BLOC4
+      // la dernière méthode
+      // GridMeanRGBSimilarityTask, avec un grid 2x2
+      _task_grid_2x2 = new pixels_similarity.GridMeanRGBSimilarityTask(_dataset, {
+        dataset_image_ids: inputs,
+        desc_opt_options: { nb_columns: 2, nb_lines: 2 },
+        metric_opt_options: {}
       });
 
-      _tasks=[_task,_task_grid_1x2,_task_grid_2x1,_task_grid_2x2];
+      // tous les tâches qui sont utilisées
+      _tasks = [_task, _task_grid_1x2, _task_grid_2x1, _task_grid_2x2];
 
-      for (var i=1;i<8;i++) {
-        imgData=_dataset.imageDatas[i];
-        var req=document.createElement("i");
-        req.innerHTML="Requete <br></br>";
+      // considérer chaque image comme "input"
+      for (var i = 1; i < 8; i++) {
+        imgData = _dataset.imageDatas[i];
+        var req = document.createElement("i");
+        req.innerHTML = "Requete <br></br>";
         document.getElementById("res").appendChild(req);
         document.getElementById("res").appendChild(Tools.create_canvasElt_from_imageData(imgData));
         document.getElementById("res").appendChild(document.createElement("br"));
 
-        //BLOC5
-        //...
+        // BLOC5
+        // avec chaque task, calculer la similitude
+        // entre notre image "input" et les autres de dataset
         for (var taskid in _tasks) {
-          res=_tasks[taskid].process(imgData);
+          res = _tasks[taskid].process(imgData);
 
-          var texte=document.createElement("i");
-          texte.innerHTML="Using Task "+taskid+" : ";
+          var texte = document.createElement("i");
+          texte.innerHTML = "Using Task " + taskid + " : ";
           document.getElementById("res").appendChild(texte);
 
-          //BLOC6
-          //...
-          console.log("for image id : "+imgData.orig_id+" and task id : "+taskid);
-          for (var j=1;j<6;j++) {
+          // BLOC6
+          // afficher les six premiers plus similaires images, pour chaque tâche
+          console.log("for image id : " + imgData.orig_id + " and task id : " + taskid);
+          for (var j = 1; j < 6; j++) {
             console.log(res[j]);
             document.getElementById("res").appendChild(Tools.create_canvasElt_from_imageData(_dataset.imageDatas[res[j].idx]));
           }
@@ -103,4 +114,6 @@
       }
     }
   </script>
-</body></html>
+</body>
+
+</html>

@@ -8,7 +8,7 @@ pixel_metrics.rgb_edist = function (pixel_rgb1, pixel_rgb2) {
 
   // BLOC1
   // cette function prendre comme paramètres 2 pixels
-  // on va returner, avec l'aide de la function f (dans notre case: f(x, y) = x - y), le suivant:
+  // on va returner, avec l'aide de la fonction f (dans notre case: f(x, y) = x - y), le suivant:
   // sqrt(f(pixel1.r_value, pixel2.r_value)^2 + f(pixel1.g_value, pixel2.g_value)^2 + f(pixel1.b_value, pixel2.b_value)^2)
   // donc, c'est une distance euclidienne entre 2 pixels RGB
 

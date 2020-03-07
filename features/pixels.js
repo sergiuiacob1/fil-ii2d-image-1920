@@ -49,7 +49,7 @@ pixels_features.mean_rgb_per_region = function (imageData, opt_options) {
 
   // BLOC1
   // ici, on va travailler avec une région définie par (x0, y0), (x0 + dx, y0 + dy)
-  // apres, on va selectioner seulement les pixels qui sont PAS transparent dans cette région
+  // après, on va selectioner seulement les pixels qui sont PAS transparent de cette région
   // sur la base de ceux *count* pixels, on va calculer le pixel moyenne
   // si il y a pas des pixels qui sont pas transparent dans notre région, on va returner "undefined"
   var mean = [];

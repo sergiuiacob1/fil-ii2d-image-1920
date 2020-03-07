@@ -26,9 +26,9 @@ generic_similarity.SimilarityTask = function (dataset, descriptor_func, similari
   console.log(opt_options.desc_opt_options);
 
   // BLOC1
-  // pour chaque image dans notre dataset, on va calculer un descripteur pour cette image
-  // le descriptor a calculer est donne comme un parametre: descriptor_func
-  // on va donner aussi, pour la fonction qui on va calculer le descripteur, des parametres additionel (this.desc_opt_options) pour savoir comment on va calculer le descripteur
+  // pour chaque image de notre dataset, on va calculer un descripteur pour cette image
+  // le descripteur à calculer est donne comme un parametre: descriptor_func
+  // on va donner aussi, pour la fonction qui on va calculer le descripteur, des parametres additionels (this.desc_opt_options) pour savoir comment on va calculer le descripteur
   this.dataset_descriptors = [];
   for (var idx in this.dataset.imageDatas) {
     this.dataset_descriptors[idx] =
@@ -43,8 +43,9 @@ generic_similarity.SimilarityTask = function (dataset, descriptor_func, similari
 
 generic_similarity.SimilarityTask.prototype.process_descriptor = function (in_descriptor) {
 
-  //BLOC2
-  //.....
+  // BLOC2
+  // pour chaque image, nous avons maintenant des descripteurs
+  // pour chaque image, on va calculer la similarité avec un "input"
   var sim = [], order = [];
   for (var idx in this.dataset_descriptors) {
     sim[idx] = this.similarity_metric_func(
@@ -52,29 +53,33 @@ generic_similarity.SimilarityTask.prototype.process_descriptor = function (in_de
     order[idx] = idx;
   }
 
-  //BLOC3
-  //....
+  // BLOC3
+  // trier les images par similitude
+  // la dernière image a la plus grande similitude
   for (var idx1 in order)
     for (var idx2 in order)
       if (sim[order[idx1]] < sim[order[idx2]]) { aux = order[idx1]; order[idx1] = order[idx2]; order[idx2] = aux; }
 
-  //BLOC4
-  //.....
+  // BLOC4
+  // on va returner un resultat qui dit, pour chaque image
+  // la similitude de l'image et son rang
   var res = [];
   for (var idx in order) res[idx] = { idx: order[idx], sim: sim[order[idx]] }
   return res;
 }
 
 generic_similarity.SimilarityTask.prototype.process = function (in_imageData) {
-  //BLOC5
-  //...
+  // BLOC5
+  // cette fonction prendre comme paramètre une image et calculer un descripteur
+  // le descripteur a été mentionné dans le "constructeur" de SimilarityTask
+  // après, pour le reste des images de notre dataset, calculer la similarité avec ces images
   var in_descriptor = this.descriptor_func(in_imageData, this.desc_opt_options);
   return this.process_descriptor(in_descriptor);
 }
 
 
 generic_similarity.SimilarityTask.prototype.get_dataset_descriptor = function (idx) {
-  //BLOC6
-  //...
+  // BLOC6
+  // returner le descripteur pour une image
   return this.dataset_descriptors[idx];
 }

@@ -2,8 +2,6 @@
 
 ## Premières manipulations
 
----
-
 ### Q1, Q2, Q3
 
 Les commentaires sont dans les fichiers [canvas_ex1.html](./first_samples/canvas_ex1.html), [canvas_ex2.html](./first_samples/canvas_ex2.html) et [canvas_ex3.html](./first_samples/canvas_ex3.html).
@@ -47,8 +45,6 @@ Pour corriger la derniere problème de la question 8, nous utilisons la fonction
 
 ## Pixels RGBA
 
----
-
 ### Q11
 
 La fonction demandée a été implémentée dans [pixels.js](./features/pixels.js) et utilisée dans [image_get_pixel.html](./processing_samples/image_get_pixel.html).
@@ -66,8 +62,6 @@ Dans [plans.html](./processing_samples/plans.html) il y a une démo pour detecte
 ---
 
 ## Transformation d'images
-
----
 
 ### Q14
 

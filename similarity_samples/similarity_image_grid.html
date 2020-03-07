@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <script lang="js" src="../tools.js"></script>
   <script lang="js" src="../features/generic.js"></script>
@@ -9,6 +10,7 @@
   <script lang="js" src="../similarity/generic.js"></script>
   <script lang="js" src="../similarity/pixels.js"></script>
 </head>
+
 <body>
   Dataset <br>
   <img border="1" width="32" height="32" id='input1' src='../data/I1.png'></img>
@@ -31,30 +33,34 @@
   <div id="res"></div>
   <script lang="javascript">
     function similarity() {
-      var inputs=[];
+      var inputs = [];
 
-      //creation du Dataset de référence
-      for (var i=1;i<9;i++) inputs[i]="input"+i;
-      _dataset=new datasets.ImageDataset(inputs);
+      // creation du Dataset de référence
+      for (var i = 1; i < 9; i++) inputs[i] = "input" + i;
+      _dataset = new datasets.ImageDataset(inputs);
 
-      //creation d'une tâche de mesure de similarité par rapport au dataset
+      // creation d'une tâche de mesure de similarité par rapport au dataset
       // de référence
-      _task=new pixels_similarity.GridMeanRGBSimilarityTask(_dataset,{
-        desc_opt_options:{nb_lines:2,nb_columns:2},
-        metric_opt_options:{}
+      _task = new pixels_similarity.GridMeanRGBSimilarityTask(_dataset, {
+        desc_opt_options: { nb_lines: 2, nb_columns: 2 },
+        metric_opt_options: {}
       });
 
-      imgData=Tools.get_imageData_from_imgEltId("requete");
+      imgData = Tools.get_imageData_from_imgEltId("requete");
 
-      document.getElementById("res").innerHTML="Resultat par ordre de similarité <br></br>";
+      document.getElementById("res").innerHTML = "Resultat par ordre de similarité <br></br>";
 
-      res=_task.process(imgData);
+      // la même chose comme "similarity_image.html"
+      // mais maintenant on va utiliser GridMeanRGBSimilarityTask
+      // donc, ici, la "similarité" est la somme des les distances RGB entre les cellules des grids
+      // le grid est 2x2, donc il y a un total de 4 cellules pour un grid
+      res = _task.process(imgData);
 
-      for (var j=1;j<6;j++) {
+      for (var j = 1; j < 6; j++) {
         console.log(res[j]);
-        var detail=document.createElement("i");
-        detail.innerHTML = "&nbsp; &nbsp; imgIdx: "+res[j].idx+
-                            " - sim : "+res[j].sim+" <br></br>";
+        var detail = document.createElement("i");
+        detail.innerHTML = "&nbsp; &nbsp; imgIdx: " + res[j].idx +
+          " - sim : " + res[j].sim + " <br></br>";
         document.getElementById("res").appendChild(
           Tools.create_canvasElt_from_imageData(_dataset.imageDatas[res[j].idx])
         );
@@ -62,5 +68,7 @@
       }
       document.getElementById("res").appendChild(document.createElement("br"));
     }
-</script>
-</body></html>
+  </script>
+</body>
+
+</html>
