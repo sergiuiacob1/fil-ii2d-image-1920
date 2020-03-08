@@ -58,7 +58,7 @@
                 metric_opt_options: {}
             });
 
-            // histograms have 256 bins by defaultF
+            // histograms have 256 bins by default
 
             _task_grid_1x2 = new pixels_similarity.GridHistoRGBSimilarityTask(_dataset, {
                 dataset_image_ids: inputs,
@@ -99,7 +99,7 @@
             _tasks = [_task, _task_grid_1x2, _task_grid_1x2_nbins10, _task_grid_2x1,
                 _task_grid_2x1_nbins10, _task_grid_2x2, _task_grid_1x2_nbins10];
 
-            for (var i = 1; i < 13; i++) {
+            for (var i = 1; i < 9; i++) {
                 imgData = _dataset.imageDatas[i];
                 var req = document.createElement("i");
                 req.innerHTML = "Requete <br></br>";
@@ -107,8 +107,6 @@
                 document.getElementById("res").appendChild(Tools.create_canvasElt_from_imageData(imgData));
                 document.getElementById("res").appendChild(document.createElement("br"));
 
-                //BLOC5
-                //...
                 for (var taskid in _tasks) {
                     res = _tasks[taskid].process(imgData);
 
@@ -116,8 +114,6 @@
                     texte.innerHTML = "Using Task " + taskid + " : ";
                     document.getElementById("res").appendChild(texte);
 
-                    //BLOC6
-                    //...
                     console.log("for image id : " + imgData.orig_id + " and task id : " + taskid);
                     for (var j = 1; j < 6; j++) {
                         console.log(res[j]);

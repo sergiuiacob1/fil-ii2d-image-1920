@@ -12,7 +12,6 @@
 </head>
 
 <body>
-    Dataset <br>
     <img border="1" width="32" height="32" id='input1' src='../data/I1.png'></img>
     <img border="1" width="32" height="32" id='input2' src='../data/I2.png'></img>
     <img border="1" width="32" height="32" id='input3' src='../data/I3.png'></img>
@@ -27,11 +26,20 @@
     <ul>
         <li>0 : HistoGraySimilarityTask
         </li>
-        <li>1 : GridHistoGraySimilarityTask (1,2)
+
+        <li>1 : GridHistoGraySimilarityTask (1, 2, nbins = 255)
         </li>
-        <li>2 : GridHistoGraySimilarityTask (2,1)
+        <li>2 : GridHistoGraySimilarityTask (1, 2, nbins = 10)
         </li>
-        <li>3 : GridHistoGraySimilarityTask (2,2)
+
+        <li>3 : GridHistoGraySimilarityTask (2, 1, nbins = 255)
+        </li>
+        <li>4 : GridHistoGraySimilarityTask (2, 1, nbins = 10)
+        </li>
+
+        <li>5 : GridHistoGraySimilarityTask (2, 2, nbins = 255)
+        </li>
+        <li>6 : GridHistoGraySimilarityTask (2, 2, nbins = 10)
         </li>
     </ul>
     <br>
@@ -49,6 +57,8 @@
                 desc_opt_options: {},
                 metric_opt_options: {}
             });
+
+            // histograms have 256 bins by default
 
             _task_grid_1x2 = new pixels_similarity.GridHistoGraySimilarityTask(_dataset, {
                 dataset_image_ids: inputs,
@@ -68,9 +78,28 @@
                 metric_opt_options: {}
             });
 
-            _tasks = [_task, _task_grid_1x2, _task_grid_2x1, _task_grid_2x2];
+            _task_grid_1x2_nbins10 = new pixels_similarity.GridHistoGraySimilarityTask(_dataset, {
+                dataset_image_ids: inputs,
+                desc_opt_options: { nb_columns: 1, nb_lines: 2, nbins: 10 },
+                metric_opt_options: {}
+            });
 
-            for (var i = 1; i < 8; i++) {
+            _task_grid_2x1_nbins10 = new pixels_similarity.GridHistoGraySimilarityTask(_dataset, {
+                dataset_image_ids: inputs,
+                desc_opt_options: { nb_columns: 2, nb_lines: 1, nbins: 10 },
+                metric_opt_options: {}
+            });
+
+            _task_grid_2x2_nbins10 = new pixels_similarity.GridHistoGraySimilarityTask(_dataset, {
+                dataset_image_ids: inputs,
+                desc_opt_options: { nb_columns: 2, nb_lines: 2, nbins: 10 },
+                metric_opt_options: {}
+            });
+
+            _tasks = [_task, _task_grid_1x2, _task_grid_1x2_nbins10, _task_grid_2x1,
+                _task_grid_2x1_nbins10, _task_grid_2x2, _task_grid_1x2_nbins10];
+
+            for (var i = 1; i < 9; i++) {
                 imgData = _dataset.imageDatas[i];
                 var req = document.createElement("i");
                 req.innerHTML = "Requete <br></br>";
