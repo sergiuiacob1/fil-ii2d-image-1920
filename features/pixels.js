@@ -90,6 +90,147 @@ pixels_features.grid_mean_rgb = function (imageData, opt_options) {
     opt_options);
 }
 
+pixels_features.mean_gray = function (imageData, opt_options) {
+  return pixels_features.mean_gray_per_region(imageData, { x0: 0, y0: 0, dx: imageData.width, dy: imageData.height });
+}
+
+pixels_features.mean_gray_per_region = function (imageData, opt_options) {
+  x0 = opt_options && opt_options.x0 ? opt_options.x0 : 0;
+  y0 = opt_options && opt_options.y0 ? opt_options.y0 : 0;
+  dx = opt_options && opt_options.dx ? opt_options.dx : imageData.width;
+  dy = opt_options && opt_options.dy ? opt_options.dy : imageData.height;
+
+  var mean = 0;
+  var pos, count = 0;
+  for (var y = y0; y < y0 + dy; y++)
+    for (var x = x0; x < x0 + dx; x++) {
+      pos = (y * imageData.width + x) << 2;
+      if (imageData.data[pos + 3] > 0) {
+        for (var i = 0; i < 3; i++) {
+          mean += imageData.data[pos + i];
+        }
+        count++;
+      }
+    }
+
+  if (count > 0) {
+    // divide by 3 (because of R, G and B) multiplied by the total number of pixels
+    mean /= count * 3;
+    return mean;
+  }
+  return undefined;
+}
+
+pixels_features.grid_mean_gray = function (imageData, opt_options) {
+  console.log("construct grid mean gray");
+  console.log(opt_options);
+
+  return generic_features.grid_descriptor(imageData,
+    pixels_features.mean_gray_per_region,
+    opt_options
+  );
+}
+
+// histograms
+pixels_features.histo_gray = function (imageData, opt_options) {
+  return pixels_features.histo_gray_per_region(imageData, {
+    x0: 0,
+    y0: 0,
+    dx: imageData.width,
+    dy: imageData.height,
+    nbins: opt_options && opt_options.nbins ? opt_options.nbins : 256,
+  });
+}
+
+pixels_features.histo_gray_per_region = function (imageData, opt_options) {
+  x0 = opt_options && opt_options.x0 ? opt_options.x0 : 0;
+  y0 = opt_options && opt_options.y0 ? opt_options.y0 : 0;
+  dx = opt_options && opt_options.dx ? opt_options.dx : imageData.width;
+  dy = opt_options && opt_options.dy ? opt_options.dy : imageData.height;
+  var nbins = opt_options && opt_options.nbins ? opt_options.nbins : 256;
+
+  // set number of bins
+  var hist = new Array(nbins).fill(0);
+  var pos;
+
+  for (var y = y0; y < y0 + dy; y++)
+    for (var x = x0; x < x0 + dx; x++) {
+      pos = (y * imageData.width + x) << 2;
+      if (imageData.data[pos + 3] > 0) {
+        mean = 0;
+        for (var i = 0; i < 3; i++) {
+          mean += imageData.data[pos + i];
+        }
+        mean /= 3;
+        // put it in the right bin
+        // mean / 255 * (nbins - 1)
+        // -1 because arrays are from index 0
+        ++hist[Math.floor(mean / 255 * (nbins - 1))];
+      }
+    }
+
+  return hist;
+}
+
+pixels_features.grid_histo_gray = function (imageData, opt_options) {
+  console.log("construct grid histo gray");
+  console.log(opt_options);
+
+  return generic_features.grid_descriptor(imageData,
+    pixels_features.histo_gray_per_region,
+    opt_options
+  );
+}
+
+// rgb histograms
+pixels_features.histo_rgb = function (imageData, opt_options) {
+  return pixels_features.histo_rgb_per_region(imageData, {
+    x0: 0,
+    y0: 0,
+    dx: imageData.width,
+    dy: imageData.height,
+    nbins: opt_options && opt_options.nbins ? opt_options.nbins : 256,
+  });
+}
+
+pixels_features.histo_rgb_per_region = function (imageData, opt_options) {
+  x0 = opt_options && opt_options.x0 ? opt_options.x0 : 0;
+  y0 = opt_options && opt_options.y0 ? opt_options.y0 : 0;
+  dx = opt_options && opt_options.dx ? opt_options.dx : imageData.width;
+  dy = opt_options && opt_options.dy ? opt_options.dy : imageData.height;
+  var nbins = opt_options && opt_options.nbins ? opt_options.nbins : 256;
+
+  var hist = new Array(3).fill([]);
+  for (var i = 0; i < 3; ++i)
+    hist[i] = new Array(nbins).fill(0);
+
+  var pos, bin;
+  for (var y = y0; y < y0 + dy; y++)
+    for (var x = x0; x < x0 + dx; x++) {
+      pos = (y * imageData.width + x) << 2;
+      if (imageData.data[pos + 3] > 0) {
+        for (var i = 0; i < 3; i++) {
+          // nbins - 1 because arrays are from 0
+          bin = Math.floor(imageData.data[pos + i] / 255 * (nbins - 1));
+          // hist[i] is the histogram for the color
+          // bin is the bin in which the value should go
+          ++hist[i][bin];
+        }
+      }
+    }
+  return hist;
+}
+
+pixels_features.grid_histo_rgb = function (imageData, opt_options) {
+  console.log("construct grid histo rgb");
+  console.log(opt_options);
+
+  return generic_features.grid_descriptor(imageData,
+    pixels_features.histo_rgb_per_region,
+    opt_options
+  );
+}
+
 GetRandomRGBAPixel = function (opt_options) {
   this.x = opt_options.x;
   this.y = opt_options.y;

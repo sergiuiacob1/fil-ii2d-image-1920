@@ -30,3 +30,13 @@ generic_metrics.euclidian_distance_btw_feature_vectors = function (
   } else
     return undefined;
 }
+
+// generic distance, not raised to the power of 2
+generic_metrics.distance_btw_feature_vectors = function (descriptor_array_1, descriptor_array_2, feature_distance_func) {
+  if (descriptor_array_1.length == 0 || descriptor_array_2.length == 0)
+    return undefined;
+  var dist = 0;
+  for (var idx in descriptor_array_1)
+    dist += feature_distance_func(descriptor_array_1[idx], descriptor_array_2[idx]);
+  return dist;
+}
