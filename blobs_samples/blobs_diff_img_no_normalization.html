@@ -1,0 +1,67 @@
+<html>
+<head>
+<script lang="js" src="../tools.js"></script>
+<script lang="js" src="../processing2.js"></script>
+<script lang="js" src="../movement/difference.js"></script>
+<script lang="js" src="../movement/detection.js"></script>
+<script lang="js" src="../effects/focus.js"></script>
+<script lang="js" src="../metrics/generic.js"></script>
+<script lang="js" src="../metrics/pixels.js"></script>
+<script lang="js" src="../segmentation/blobs.js"></script>
+</head>
+<body>
+
+  <img id="input" src="../data/16_03.jpg" width="160" height="90"></img>
+  <canvas id="output1" width="160" height="90"></canvas><br></br>
+  <canvas id="output2" width="160" height="90" style="display:none"></canvas>
+  <canvas id="output3" width="160" height="90"></canvas>
+  <canvas id="output4" width="160" height="90"></canvas>
+
+  <br></br>
+
+  <button onclick="javascript:process()">Blobs</button>
+
+
+  <script lang="javascript">
+  var process=function() {
+    var _focus_options={focus_x:10,focus_y:10,focus_radius:10,width:160,height:90};
+    var _task1=new focus.MovingFocus(_focus_options);
+    var _proc1=new processing2("input",_task1,"output1");
+
+    var _opt_options={width:160,height:90};
+    var _task2=new diff.DifferenceImageRGB(_opt_options);
+    var _proc2=new processing2("output1",_task2,"output2");
+
+    var _opt_options={metric:pixel_metrics.visible_edist,threshold:0};
+    var _task3=new blobs.Pixel8ConnectivityBlobs(_opt_options);
+    var _proc3=new processing2("output2",_task3,"output3");
+
+    var img_elt=document.getElementById("input");
+    img_elt.addEventListener("loadeddata",function(){
+      _task2.set_first_frame_from_eltId("input");
+    });
+
+    var cvs3=document.getElementById("output3");
+    var cvs3_ctxt=cvs3.getContext("2d");
+
+    var count=0;
+    var loop=function() {
+      _proc1.do_process();
+      _task1.updateFocus();
+
+      _proc2.do_process();
+
+      cvs3_ctxt.beginPath();
+      cvs3_ctxt.clearRect(0,0,cvs3.width,cvs3.height);
+      _proc3.do_process();
+      count++;
+
+      if (count<100)
+        setTimeout(loop,100);
+    }
+
+    loop();
+  }
+  </script>
+</body>
+</html>
