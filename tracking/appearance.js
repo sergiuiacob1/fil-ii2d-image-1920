@@ -27,9 +27,9 @@ appearance_tracking.MeanShift.prototype.process = function (in_imgData, out_imgD
   var in_width = in_imgData.width, in_height = in_imgData.height;
 
   // BLOC 1
-  // this.bbox_feature represents the feature for the model we are tracking
-  // if that was not defined, then calculate it by just looking inside the initial this.bbox
-  // that will be a rectangular region, so use per_region_feture_func
+  // this.bbox_feature représente la caractéristique du modèle que nous suivons
+  // si cela n'a pas été défini, alors calculez-le en regardant simplement à l'intérieur de la boîte initiale this.bbox
+  // qui sera une région rectangulaire, utilisez donc per_region_feture_func
   if (!this.bbox_feature) {
     var _opt_options = this.bbox;
     this.bbox_feature = this.per_region_feature_func(in_imgData, _opt_options);
@@ -37,14 +37,14 @@ appearance_tracking.MeanShift.prototype.process = function (in_imgData, out_imgD
 
 
   // BLOC 2
-  // pan_x and pan_y represents how much OUTSIDE the box we should look
-  // how much we can move the bbox
+  // pan_x et pan_y représente ce qui se trouve à l'EXTERIEUR de la boîte que nous devrions regarder
+  // combien nous pouvons déplacer la bbox
   this.pan_x = Math.round(this.window_width / 2 - this.bbox.dx / 2);
   this.pan_y = Math.round(this.window_height / 2 - this.bbox.dy / 2);
 
   // BLOC 3
-  // here we set the coordinates for the area to analyze
-  // we are careful NOT to exit the canvas we're working with
+  // ici nous fixons les coordonnées de la zone à analyser
+  // nous faisons attention à ne pas sortir de le canvas avec lequelle nous travaillons
   var x_start = (this.bbox.x0 - this.pan_x) > 0 ? (this.bbox.x0 - this.pan_x) : 0;
   var y_start = (this.bbox.y0 - this.pan_y) > 0 ? (this.bbox.y0 - this.pan_y) : 0;
   var x_end = (this.bbox.x0 + this.bbox.dx + this.pan_x) < in_width ?
@@ -59,8 +59,8 @@ appearance_tracking.MeanShift.prototype.process = function (in_imgData, out_imgD
   var count_y = in_imgData.height;
 
   // BLOC 4
-  // if we should display our output somewhere, then do so
-  // display in the output canvas the portion of the image we are analyzing
+  // si nous devons afficher notre production quelque part, alors faites-le
+  // afficher dans le "output canvas" la partie de l'image que nous analysons
   if (out_imgData) {
     Tools.copy_partial_imageData_into_imageData(in_imgData,
       0, 0, in_imgData.width, in_imgData.height,
@@ -69,9 +69,9 @@ appearance_tracking.MeanShift.prototype.process = function (in_imgData, out_imgD
   }
 
   // BLOC 5
-  // step_x and step_y represent the offsets we should move our bbox with inside the defined window
-  // so, in our region defined by ((x_start, y_start), (x_end, y_end)), build all possible bbox-es
-  // and display them in the output canvas, if there is one
+  // step_x et step_y représentent les "offsets" avec lesquelles nous devons déplacer notre bbox à l'intérieur de la fenêtre définie
+  // donc, dans notre région définie par ((x_start, y_start), (x_end, y_end)), construire toutes les bbox possibles
+  // et les afficher dans le output canvas, s'il y en a un
   for (var y = y_start; y < y_end; y += this.step_y) {
     var count_x = 0;
     for (var x = x_start; x < x_end; x += this.step_x) {
@@ -90,9 +90,9 @@ appearance_tracking.MeanShift.prototype.process = function (in_imgData, out_imgD
       }
 
       // BLOC 6
-      // find the bbox that is the most similar with the model we are tracking
-      // this.bbox_feature represents the feature for our model
-      // and local_bbox_feature represents the feature for the current bbox
+      // trouver la bbox qui ressemble le plus au modèle que nous suivons
+      // this.bbox_feature représente la caractéristique de notre modèle
+      // et local_bbox_feature représente la caractéristique de la bbox actuelle
       var local_bbox_feature = this.per_region_feature_func(in_imgData, local_bbox);
       if (!local_bbox_feature) continue;
       var diff = this.metric_func(this.bbox_feature, local_bbox_feature);
@@ -108,17 +108,17 @@ appearance_tracking.MeanShift.prototype.process = function (in_imgData, out_imgD
   }
 
   // BLOC 7
-  // if the most similar bbox we found is not the one we currently have, update it
+  // si la bbox la plus similaire que nous avons trouvée n'est pas celle que nous avons actuellement, mettez-la à jour
   if (min < this.threshold && this.bbox != min_bbox) {
     this.count++;
     this.bbox = min_bbox;
-    // the model might change. if this.update_model is true, then update the model
+    // le modèle peut changer. si this.update_model est vrai, alors mettez à jour le modèle
     if (this.update_model)
       this.bbox_feature = min_bbox_feature;
   }
 
-  // display in the output canvas (if there is one) the bbox that best matches our model
-  // with a purple outstroke
+  // afficher dans le output canvas (s'il y en a un) la bbox qui correspond le mieux à notre modèle
+  // avec une touche de violet
   if (out_imgData) {
     Tools.strokeBBox_on_imageData(out_imgData, this.bbox, [255, 0, 255, 255]);
   }

@@ -14,25 +14,25 @@
 <body>
   <!--style="background-color:black;" -->
 
-  <!-- first canvas is our input, the place where we look for the model we are tracking -->
+  <!-- le première canvas est notre contribution, l'endroit où nous cherchons le modèle que nous suivons -->
   <canvas id="input" width="150" height="100" style="vertical-align:top"></canvas>
-  <!-- this canvas represents our output, where we show all our bbox-es, their content, the best one etc. -->
+  <!-- ce canvas représente notre resultat, où nous montrons toutes nos boîtes de réception, leur contenu, la meilleure, etc. -->
   <canvas id="output2" width="250" height="700"></canvas>
 
 
   <script lang="javascript">
 
-    // create the moving circle: a red sircle, with its center at (0, 0) and a radius of 10
-    // moving with (2, 2) pixels at a time
+    // créer le cercle mobile : un cercle rouge, avec son centre à (0, 0) et un rayon de 10
+    // se déplaçant avec (2, 2) pixels à la fois
     var _opt_options = { x0: 10, y0: 10, radius: 10, step_x: 2, step_y: 2, random: true, fillStyle: "red" };
     var _task1 = new animations.MovingCircle("input", _opt_options);
 
-    // the dimensions for our bbox
+    // les dimensions four notre bbox
     var _bbox = { x0: 0, y0: 0, dx: 20, dy: 20 };
 
-    // this represents the window where we will look for our model
-    // inside this window, we will create every possible bbox
-    // in this case, they will be moved with step_x = 3, step_y = 3 pixels at a time
+    // ceci représente la fenêtre où nous chercherons notre modèle
+    // dans cette fenêtre, nous allons créer toutes les boîtes à lettres possibles
+    // dans ce cas, ils seront déplacés avec step_x = 3, step_y = 3 pixels à la fois
     var _tracking_options = {
       window_width: 40,
       window_height: 40,
@@ -40,29 +40,29 @@
       step_y: 3
     };
 
-    // our tracking tasks receives the initial bbox (that will also calculate the feature for our "model", that is our red circle)
-    // HOW it should calculate that feature: using the mean RGB pixel
-    // how it should define similarity: euclidian distance
-    // and the tracking options
+    // nos tâches de suivi reçoivent la bbox initiale (qui calculera également la caractéristique de notre "modèle", c'est-à-dire notre cercle rouge)
+    // COMMENT il doit calculer cette caractéristique : en utilisant le pixel RGB moyen
+    // comment définir la similarité : distance euclidienne
+    // et les options de suivi
     var _task2 = new appearance_tracking.MeanShift(_bbox,
       pixels_features.mean_rgb_afactor_per_region,
       pixel_metrics.rgb_edist, _tracking_options);
 
-    // the task will be applied to the input and its results displayed in the "output2" canvas
+    // la tâche sera appliquée à l'input et ses résultats seront affichés dans le canvas "output2"
     var _proc2 = new processing2("input", _task2, "output2");
 
 
     var count = 0;
-    // draw the initial circle so _task2 can calculate the feature for the model (circle)
+    // dessiner le cercle initial pour que _task2 puisse calculer la caractéristique du modèle (cercle)
     _task1.draw();
-    // and start tracking
+    // et commencer le suivi
     var loop = function () {
       _proc2.do_process();
       _task1.animate();
 
       count++;
-      // only execute at most 1000 steps
-      // and between each step, make a pause
+      // n'exécuter que 1000 étapes au maximum
+      // et entre chaque étape, faire une pause
 
       if (count < 1000)
         setTimeout(loop, 100);
