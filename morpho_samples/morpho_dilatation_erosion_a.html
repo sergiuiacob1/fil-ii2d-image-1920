@@ -29,32 +29,29 @@
       Tools.copySize("input", "output2");
 
       // BLOC1
-      // appliquer une dilatation au cercle rouge
-      // chaque pixel sera placé dans une fenêtre de 10x10 et il sera remplacé par le pixel maximum de cette fenêtre
+      // apply dilatation to the red circle
+      // use cross pattern
       var _opt_options = { window_width: 10, window_height: 10 };
-      var _task1 = new morpho_effects.DilatationWindow(_opt_options);
+      var _task1 = new morpho_effects.DilatationCross(_opt_options);
       var _proc1 = new processing2("input", _task1, "output1");
       _proc1.do_process();
 
       // BLOC2
-      // appliquer l'érosion sur le cercle rouge dilaté, avec une fenêtre de 10x10
-      var _task2 = new morpho_effects.ErosionWindow(_opt_options);
+      // apply erosion to the dilated red circle, cross pattern
+      var _task2 = new morpho_effects.ErosionCross(_opt_options);
       var _proc2 = new processing2("output1", _task2, "output2");
       _proc2.do_process();
 
       Tools.copySize("input2", "output3");
       Tools.copySize("input2", "output4");
 
-      // BLOC3
-      // appliquer maintenant la dilatation à l'image du paysage
+      // same, but for the landscape image
       var _opt_options = { window_width: 10, window_height: 10 };
-      var _task3 = new morpho_effects.DilatationWindow(_opt_options);
+      var _task3 = new morpho_effects.DilatationCross(_opt_options);
       var _proc3 = new processing2("input2", _task3, "output3");
       _proc3.do_process();
 
-      // BLOC4
-      // et ensuite appliquer l'érosion à l'image de paysage dilatée
-      var _task4 = new morpho_effects.ErosionWindow(_opt_options);
+      var _task4 = new morpho_effects.ErosionCross(_opt_options);
       var _proc4 = new processing2("output3", _task4, "output4");
       _proc4.do_process();
     }
