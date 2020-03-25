@@ -28,7 +28,9 @@
     var _task1 = new animations.MovingCircle("input", _opt_options);
 
     // the dimensions for our bbox
-    var _bbox = { x0: 0, y0: 0, dx: 20, dy: 20 };
+    // the center will be defined by (x0 + dx/2, y0 + dy/2)
+    // also add a ray
+    var _bbox = { x0: 0, y0: 0, dx: 20, dy: 20, ray: 10 };
 
     // this represents the window where we will look for our model
     // inside this window, we will create every possible bbox
@@ -44,13 +46,13 @@
     // HOW it should calculate that feature: using the mean RGB pixel
     // how it should define similarity: euclidian distance
     // and the tracking options
-    var _task2 = new appearance_tracking.MeanShift(_bbox,
-      pixels_features.mean_rgb_afactor_per_region,
+    var _task2 = new appearance_tracking.MeanShiftCircular(
+      _bbox,
+      pixels_features.mean_rgb_afactor_per_circular_region,
       pixel_metrics.rgb_edist, _tracking_options);
 
     // the task will be applied to the input and its results displayed in the "output2" canvas
     var _proc2 = new processing2("input", _task2, "output2");
-
 
     var count = 0;
     // draw the initial circle so _task2 can calculate the feature for the model (circle)

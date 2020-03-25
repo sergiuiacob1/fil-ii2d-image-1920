@@ -60,20 +60,19 @@ Tools.copy_imageData_into_imageData = function (src_imageData, dest_imageData, x
 }
 
 
-Tools.copy_partial_imageData_into_imageData =
-  function (src_imageData, x0, y0, dx, dy, dest_imageData, x1, y1) {
+Tools.copy_partial_imageData_into_imageData = function (src_imageData, x0, y0, dx, dy, dest_imageData, x1, y1) {
 
-    for (var src_y = y0; src_y < Math.min(y0 + dy, src_imageData.height); src_y++)
-      for (var src_x = x0; src_x < Math.min(x0 + dx, src_imageData.width); src_x++) {
-        var w_src = (src_y * src_imageData.width + src_x) << 2;
-        w_out = ((y1 + (src_y - y0)) * dest_imageData.width + (x1 + (src_x - x0))) << 2;
-        dest_imageData.data[w_out] = src_imageData.data[w_src];
-        dest_imageData.data[w_out + 1] = src_imageData.data[w_src + 1];
-        dest_imageData.data[w_out + 2] = src_imageData.data[w_src + 2];
-        dest_imageData.data[w_out + 3] = src_imageData.data[w_src + 3];
+  for (var src_y = y0; src_y < Math.min(y0 + dy, src_imageData.height); src_y++)
+    for (var src_x = x0; src_x < Math.min(x0 + dx, src_imageData.width); src_x++) {
+      var w_src = (src_y * src_imageData.width + src_x) << 2;
+      w_out = ((y1 + (src_y - y0)) * dest_imageData.width + (x1 + (src_x - x0))) << 2;
+      dest_imageData.data[w_out] = src_imageData.data[w_src];
+      dest_imageData.data[w_out + 1] = src_imageData.data[w_src + 1];
+      dest_imageData.data[w_out + 2] = src_imageData.data[w_src + 2];
+      dest_imageData.data[w_out + 3] = src_imageData.data[w_src + 3];
 
-      }
-  }
+    }
+}
 
 Tools.get_region_from_imageData = function (src_imageData, x0, y0, dx, dy) {
   var reg_imageData = src_imageData.ctxt.getImageData(

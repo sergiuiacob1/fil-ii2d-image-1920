@@ -155,6 +155,42 @@ pixels_features.mean_rgb_afactor_per_region = function (imageData, opt_options) 
   return undefined;
 }
 
+pixels_features.mean_rgb_afactor_per_circular_region = function (imageData, opt_options) {
+  var x0 = opt_options && opt_options.x0 ? opt_options.x0 : 0;
+  var y0 = opt_options && opt_options.y0 ? opt_options.y0 : 0;
+  var dx = opt_options && opt_options.dx ? opt_options.dx : imageData.width;
+  var dy = opt_options && opt_options.dy ? opt_options.dy : imageData.height;
+  var ray = opt_options && opt_options.ray ? opt_options.ray : Math.floor(dx / 2 + dy / 2);
+
+  var x_center = Math.floor(x0 + dx / 2);
+  var y_center = Math.floor(y0 + dy / 2);
+
+  var mean = [];
+  mean[0] = 0; mean[1] = 0; mean[2] = 0;
+  var pos = 0; var count = 0;
+  var dist;
+  for (var y = y_center - ray; y < y_center + ray; y++)
+    for (var x = x_center - ray; x < x_center + ray; x++) {
+      // if this pixel is outside the circle, skip it
+      dist = Math.sqrt((x - x_center) ** 2 + (y - y_center) ** 2);
+      if (dist > ray)
+        continue;
+
+      pos = (y * imageData.width + x) << 2;
+      for (var i = 0; i < 3; i++) {
+        mean[i] += (imageData.data[pos + i] * imageData.data[pos + 3]);
+      }
+      count++;
+    }
+  if (count > 0) {
+    for (var i = 0; i < 3; i++) {
+      mean[i] = Math.round(mean[i] / count);
+    }
+    return mean;
+  }
+  return undefined;
+}
+
 pixels_features.grid_mean_gray = function (imageData, opt_options) {
   console.log("construct grid mean gray");
   console.log(opt_options);
