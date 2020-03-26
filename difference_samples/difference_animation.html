@@ -1,52 +1,59 @@
 <html>
-<head>
-<script lang="js" src="../tools.js"></script>
-<script lang="js" src="../processing2.js"></script>
-<script lang="js" src="../movement/difference.js"></script>
-<script lang="js" src="../effects/focus.js"></script>
-<script lang="js" src="../features/generic.js"></script>
-<script lang="js" src="../features/pixels.js"></script>
-<script lang="js" src="../metrics/generic.js"></script>
-<script lang="js" src="../metrics/pixels.js"></script>
-<script lang="js" src="../animation/moving_circle.js"></script>
-<script lang="js" src="../tracking/appearance.js"></script>
-</head>
-<body><!--style="background-color:black; vertical-align: top;"-->
 
-  <canvas id="input" width="300" height="200"  style="vertical-align: top;"></canvas>
-  <canvas id="output" width="300" height="200"  style="vertical-align: top;"></canvas>
+<head>
+  <script lang="js" src="../tools.js"></script>
+  <script lang="js" src="../processing2.js"></script>
+  <script lang="js" src="../movement/difference.js"></script>
+  <script lang="js" src="../effects/focus.js"></script>
+  <script lang="js" src="../features/generic.js"></script>
+  <script lang="js" src="../features/pixels.js"></script>
+  <script lang="js" src="../metrics/generic.js"></script>
+  <script lang="js" src="../metrics/pixels.js"></script>
+  <script lang="js" src="../animation/moving_circle.js"></script>
+  <script lang="js" src="../tracking/appearance.js"></script>
+</head>
+
+<body>
+  <!--style="background-color:black; vertical-align: top;"-->
+
+  <canvas id="input" width="300" height="200" style="vertical-align: top;"></canvas>
+  <canvas id="output" width="300" height="200" style="vertical-align: top;"></canvas>
 
 
   <script lang="javascript">
 
-    //BLOC1
-    //...
-    var _opt_options={
-      x0:40,y0:40,radius:40,step_x:10,step_y:10,random:true,
+    // BLOC1
+    // créer un cercle mobile qui commence dans le coin supérieur gauche
+    // et qui se déplace avec (10, 10) pixels par image
+    var _opt_options = {
+      x0: 40, y0: 40, radius: 40, step_x: 10, step_y: 10, random: true,
     };
-    var _task1=new animations.MovingCircle("input",_opt_options);
+    var _task1 = new animations.MovingCircle("input", _opt_options);
 
-    //BLOC2
-    //...
-    var _opt_options={width:300,height:200,threshold:1};
-    var _task2=new diff.NormalizedDifferenceImageRGB(_opt_options);
-    var _proc2=new processing2("input",_task2,"output");
+    // BLOC2
+    // traiter la différence entre les cadres de notre toile
+    // le "canvas" contient le cercle créé ci-dessus
+    var _opt_options = { width: 300, height: 200, threshold: 1 };
+    var _task2 = new diff.NormalizedDifferenceImageRGB(_opt_options);
+    var _proc2 = new processing2("input", _task2, "output");
 
-    //BLOC3
-    //....
+    // BLOC3
+    // dessiner les données initiales, afin que la trame précédente puisse être initialisée
     _task1.draw();
     _task2.set_first_frame_from_eltId("input");
 
-    //BLOC4
-    //...
-    var loop=function() {
+    // BLOC4
+    // commencer à traiter la différence entre les images
+    // entre chaque image, faire une pause de 200 millisecondes
+    var loop = function () {
       _task1.animate();
       _proc2.do_process();
 
-      setTimeout(loop,200);
+      setTimeout(loop, 200);
     }
     loop();
 
   </script>
 </body>
+
 </html>
