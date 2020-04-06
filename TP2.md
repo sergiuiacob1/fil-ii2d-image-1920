@@ -17,3 +17,10 @@ En exécutant les fichiers `html`, la première chose que nous observons est que
 `10` est un valeur plus faible qui "généralisera" les nuances de couleur. Par example, les couleurs bleu sera très probablement considéré similaire et donc mis dans la même classe sur la histogramme. Cela rendra les images plus bleues plus similaires de celles qui ont plus de vert (par example, `Task1` vs. `Task2` pour les histogrammes gris).
 
 En faisant une comparaison entre les histogrammes gris et les RGB (avec les mêmes paramétrés), on constatons que les résultats ne diffèrent pas beaucoup. On peut dire que la tâche `HistoGraySimilarityTask` regarde les images dans leurs ensemble, en regardant la similitude par la luminosité de l'image et `HistoRGBSimilarityTask` regarde les différences entre chaque canaux de couleur.
+
+### Q4.0
+Les commentaires sont dans les fichiers [effects/photo_fill.js](effects/photo_fill.js) et [effects_samples/photo_fill.html](effects_samples/photo_fill.html).
+
+### Q4.1
+J'implémenté les autres effects en utilisant cette tâche : `photo_fill.GenericPhotoFillPixelsFromDatasetTask`.
+Je l'ai appliqué ici : [effects_samples/photo_fill_2.html](effects_samples/photo_fill_2.html).

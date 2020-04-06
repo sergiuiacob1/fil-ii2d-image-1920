@@ -84,4 +84,5 @@ Dans [image_gray_3.html](./processing_samples/image_gray_3.html), l'image a les 
 La tâche `ToGrayDistanceTask` implémentée dans [gray_filters.js](./filters/gray_filters.js) permet de transformer en gris un portion de l'image proche d'un certain pixel. Démo: [image_gray_4.html](./processing_samples/image_gray_4.html).
 
 
-
+### Q20
+J'ai essayé d'implementée la fonction de zoom `ToGrayZoomTask` et de l'appliquer ici : [processing_samples/image_gray_5.html](./processing_samples/image_gray_5.html), mais cela ne fonctionne pas bien.

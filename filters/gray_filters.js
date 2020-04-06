@@ -188,7 +188,23 @@ ToGrayZoomTask.prototype.process = function (imageData) {
 
   var pos = 0;
   var dist, mean;
-  var toZoom = [];
+  for (var y = 0; y < imageData.height; ++y)
+    for (var x = 0; x < imageData.width; ++x) {
+      // distance from the centre
+      dist = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
+      if (dist < ray) {
+        // these pixels are inside the circle, zoom them
+        var srcPos = ((y / 2) * imageData.width + (x / 2)) << 2;
+        for (var i = 0; i < 4; ++i) {
+          imageData.data[pos + i] = imageData.data[srcPos + i];
+        }
+      }
+      pos += 4;
+    }
+
+
+  pos = 0;
+  // now I can make the other pixels gray
   for (var y = 0; y < imageData.height; ++y)
     for (var x = 0; x < imageData.width; ++x) {
       // distance from the centre
@@ -202,34 +218,53 @@ ToGrayZoomTask.prototype.process = function (imageData) {
         for (var i = 0; i < 3; ++i)
           imageData.data[pos + i] = mean;
       }
-      else {
-        // these pixels are inside the circle, remember them
-        var aux = []
-        for (var i = 0; i < 4; ++i)
-          aux.push(imageData.data[pos + i]);
-        toZoom.push(aux);
-      }
       pos += 4;
     }
 
-  // now for the zooming part
-  // zoom only the "middle" pixels
-  var middleIndex = (toZoom.length + 1) / 2;
-  
+  // var pos = 0;
+  // var dist, mean;
+  // var toZoom = [];
+  // for (var y = 0; y < imageData.height; ++y)
+  //   for (var x = 0; x < imageData.width; ++x) {
+  //     // distance from the centre
+  //     dist = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
+  //     if (dist > ray) {
+  //       // if it's outside the ray, make it gray
+  //       mean = 0;
+  //       for (var i = 0; i < 3; ++i)
+  //         mean += imageData.data[pos + i];
+  //       mean /= 3;
+  //       for (var i = 0; i < 3; ++i)
+  //         imageData.data[pos + i] = mean;
+  //     }
+  //     else {
+  //       // these pixels are inside the circle, remember them
+  //       var aux = []
+  //       for (var i = 0; i < 4; ++i)
+  //         aux.push(imageData.data[pos + i]);
+  //       toZoom.push(aux);
+  //     }
+  //     pos += 4;
+  //   }
 
-  // put the zoomed part in the image data
-  var i = 0;
-  pos = 0;
-  for (var y = 0; y < imageData.height; ++y)
-    for (var x = 0; x < imageData.width; ++x) {
-      // distance from the centre
-      dist = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
-      if (dist <= ray)
-        for (var j = 0; j < 4; ++j)
-          imageData.data[pos + j] = zoomed[i][j];
+  // // now for the zooming part
+  // // zoom only the "middle" pixels
+  // var middleIndex = (toZoom.length + 1) / 2;
 
-      pos += 4;
-    }
+
+  // // put the zoomed part in the image data
+  // var i = 0;
+  // pos = 0;
+  // for (var y = 0; y < imageData.height; ++y)
+  //   for (var x = 0; x < imageData.width; ++x) {
+  //     // distance from the centre
+  //     dist = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
+  //     if (dist <= ray)
+  //       for (var j = 0; j < 4; ++j)
+  //         imageData.data[pos + j] = zoomed[i][j];
+
+  //     pos += 4;
+  //   }
 
 
   // move the circle
